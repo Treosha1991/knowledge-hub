@@ -47,8 +47,10 @@ def send_magic_login_email(
         [
             f"Hello {greeting},",
             "",
-            "Use this one-time link to sign in to Knowledge Hub:",
+            "Open this one-time link to start signing in to Knowledge Hub:",
             login_url,
+            "",
+            "On the next page, click the confirmation button to finish sign-in.",
             "",
             f"This link expires in {ttl_minutes} minute(s).",
             "",

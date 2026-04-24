@@ -53,24 +53,8 @@ def consume_login_token(
     token: str,
     commit: bool = True,
 ) -> User:
-    normalized_token = str(token or "").strip()
-    if not normalized_token:
-        raise ValueError("Login token is required.")
-
-    login_token = db_session.scalar(
-        select(LoginToken).where(LoginToken.token == normalized_token)
-    )
-    if login_token is None:
-        raise ValueError("Login token was not found.")
-    if login_token.consumed_at is not None:
-        raise ValueError("Login token has already been used.")
-    if _ensure_utc(login_token.expires_at) <= datetime.now(timezone.utc):
-        raise ValueError("Login token has expired.")
-
+    login_token = _load_active_login_token(db_session, token=token)
     user = login_token.user
-    if user.status != "active":
-        raise ValueError("User is not active.")
-
     login_token.consumed_at = datetime.now(timezone.utc)
     if commit:
         db_session.commit()
@@ -79,6 +63,15 @@ def consume_login_token(
         db_session.flush()
 
     return user
+
+
+def preview_login_token(
+    db_session: Session,
+    *,
+    token: str,
+) -> User:
+    login_token = _load_active_login_token(db_session, token=token)
+    return login_token.user
 
 
 def resolve_session_actor(db_session: Session) -> User | None:
@@ -112,3 +105,28 @@ def _ensure_utc(value):
     if value.tzinfo is None:
         return value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc)
+
+
+def _load_active_login_token(
+    db_session: Session,
+    *,
+    token: str,
+) -> LoginToken:
+    normalized_token = str(token or "").strip()
+    if not normalized_token:
+        raise ValueError("Login token is required.")
+
+    login_token = db_session.scalar(
+        select(LoginToken).where(LoginToken.token == normalized_token)
+    )
+    if login_token is None:
+        raise ValueError("Login token was not found.")
+    if login_token.consumed_at is not None:
+        raise ValueError("Login token has already been used.")
+    if _ensure_utc(login_token.expires_at) <= datetime.now(timezone.utc):
+        raise ValueError("Login token has expired.")
+
+    user = login_token.user
+    if user.status != "active":
+        raise ValueError("User is not active.")
+    return login_token

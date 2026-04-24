@@ -20,7 +20,14 @@ from .automation_events import (
     safe_record_automation_event,
     safe_record_events_for_projects,
 )
-from .auth import consume_login_token, issue_login_token, resolve_session_actor, sign_in_user, sign_out_user
+from .auth import (
+    consume_login_token,
+    issue_login_token,
+    preview_login_token,
+    resolve_session_actor,
+    sign_in_user,
+    sign_out_user,
+)
 from .backup_archives import create_backup_archive, get_latest_backup, get_sqlite_database_path, list_recent_backups
 from .chat_bootstrap import build_chat_bootstrap_pack, render_chat_bootstrap_text
 from .content_import import (
@@ -139,6 +146,7 @@ __all__ = [
     "import_session_payload",
     "import_snapshot_payload",
     "issue_login_token",
+    "preview_login_token",
     "list_accessible_project_ids",
     "list_accessible_workspace_ids",
     "list_accessible_workspaces",

@@ -8,6 +8,7 @@ from ..services import (
     consume_login_token,
     get_mail_status,
     issue_login_token,
+    preview_login_token,
     safe_record_automation_event,
     send_magic_login_email,
     sign_in_user,
@@ -96,14 +97,31 @@ def login():
     )
 
 
-@bp.get("/magic/<token>")
+@bp.route("/magic/<token>", methods=["GET", "POST"])
 def magic_login(token: str):
     session = get_session()
+    next_target = sanitize_relative_path(request.values.get("next"))
+
+    if request.method == "GET":
+        try:
+            user = preview_login_token(session, token=token)
+        except ValueError as exc:
+            flash(_friendly_login_error(str(exc)), "error")
+            return redirect(url_for("auth.login", next=next_target or None))
+
+        return render_template(
+            "auth/magic_login.html",
+            page_title="Confirm Sign In",
+            user=user,
+            token=token,
+            next_target=next_target or "",
+        )
+
     try:
         user = consume_login_token(session, token=token, commit=True)
     except ValueError as exc:
-        flash(str(exc), "error")
-        return redirect(url_for("auth.login"))
+        flash(_friendly_login_error(str(exc)), "error")
+        return redirect(url_for("auth.login", next=next_target or None))
 
     sign_in_user(user)
     safe_record_automation_event(
@@ -114,7 +132,6 @@ def magic_login(token: str):
         details={"user_email": user.email},
     )
     flash(f"Signed in as {user.display_name}.", "success")
-    next_target = sanitize_relative_path(request.args.get("next"))
     return redirect(next_target or url_for("main.home"))
 
 
@@ -133,3 +150,12 @@ def logout():
         )
     flash("Signed out.", "success")
     return redirect(url_for("main.home"))
+
+
+def _friendly_login_error(message: str) -> str:
+    if message == "Login token has already been used.":
+        return (
+            "This sign-in link was already opened. Request a fresh login email and "
+            "use the new confirmation page."
+        )
+    return message

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Authentication</p>
+        <h1>Confirm Sign In</h1>
+        <p class="lead">
+            We found a valid one-time sign-in link for {{ user.display_name }}.
+            Click the button below to finish signing in.
+        </p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    <div class="note-block">
+        Email providers sometimes pre-open links for safety checks. Knowledge Hub now waits for this
+        confirmation step before consuming your login token.
+    </div>
+
+    <form method="post" class="form-grid">
+        <input type="hidden" name="next" value="{{ next_target }}">
+        <div class="full-width meta-stack">
+            <div><strong>User:</strong> {{ user.display_name }}</div>
+            <div><strong>Email:</strong> {{ user.email }}</div>
+            {% if next_target %}
+                <div><strong>Next page:</strong> <code>{{ next_target }}</code></div>
+            {% endif %}
+        </div>
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Continue Sign In</button>
+            <a class="button button-secondary" href="{{ url_for('auth.login', next=next_target or None) }}">Back</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
