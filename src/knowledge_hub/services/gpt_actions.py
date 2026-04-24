@@ -63,6 +63,53 @@ def build_gpt_actions_schema(config, *, server_url: str | None = None) -> dict:
                     },
                     "required": ["project_slug", "source", "task", "summary"],
                 },
+                "ProjectPackageIngest": {
+                    "type": "object",
+                    "properties": {
+                        "project": {
+                            "type": "object",
+                            "properties": {
+                                "workspace_slug": {"type": "string"},
+                                "slug": {"type": "string"},
+                                "name": {"type": "string"},
+                                "description": {"type": "string"},
+                                "stack": {"type": "string"},
+                                "status": {"type": "string"},
+                                "current_goal": {"type": "string"},
+                                "rules": {"type": "string"},
+                            },
+                            "required": ["slug", "name"],
+                        },
+                        "session_logs": {
+                            "type": "array",
+                            "items": {"$ref": "#/components/schemas/SessionLogIngest"},
+                        },
+                        "prompt_templates": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {"type": "string"},
+                                    "title": {"type": "string"},
+                                    "content": {"type": "string"},
+                                },
+                                "required": ["title", "content"],
+                            },
+                        },
+                        "snapshots": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {"type": "string"},
+                                    "content": {"type": "string"},
+                                },
+                                "required": ["title", "content"],
+                            },
+                        },
+                    },
+                    "required": ["project"],
+                },
             },
         },
         "security": [{"bearerAuth": []}],
@@ -166,6 +213,48 @@ def build_gpt_actions_schema(config, *, server_url: str | None = None) -> dict:
                     },
                 }
             },
+            "/api/gpt-actions/project-package": {
+                "post": {
+                    "operationId": "ingestKnowledgeHubProjectPackage",
+                    "summary": "Seed or update a project package",
+                    "description": (
+                        "Creates or updates project metadata, snapshots, prompt templates, and optional session logs "
+                        "in one call. Use this when a project is new or when the handoff needs a richer baseline."
+                    ),
+                    "x-openai-isConsequential": True,
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ProjectPackageIngest"}
+                            }
+                        },
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Project package import result",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ok": {"type": "boolean"},
+                                            "project_slug": {"type": "string"},
+                                            "project_created": {"type": "boolean"},
+                                            "session_logs_imported": {"type": "integer"},
+                                            "prompt_templates_created": {"type": "integer"},
+                                            "prompt_templates_updated": {"type": "integer"},
+                                            "snapshots_created": {"type": "integer"},
+                                            "snapshots_updated": {"type": "integer"},
+                                        },
+                                        "required": ["ok", "project_slug", "project_created"],
+                                    }
+                                }
+                            },
+                        }
+                    },
+                }
+            },
         },
     }
 
@@ -202,6 +291,10 @@ def build_gpt_actions_setup_guide(config, *, server_url: str | None = None) -> d
                 "operation_id": "ingestKnowledgeHubSessionLog",
                 "purpose": "Saves the finished session summary back into Knowledge Hub.",
             },
+            {
+                "operation_id": "ingestKnowledgeHubProjectPackage",
+                "purpose": "Seeds or updates full project context when a project is new or too sparse.",
+            },
         ],
         "builder_steps": [
             "Open the GPT editor and create or edit your custom GPT.",
@@ -210,6 +303,7 @@ def build_gpt_actions_setup_guide(config, *, server_url: str | None = None) -> d
             "Paste the raw Knowledge Hub API token value from the API Tokens page.",
             "Import the OpenAPI schema from the schema URL below.",
             "Test reading a project handoff first, then test writing one session log.",
+            "If a project is missing or the handoff is too sparse, use the project-package action to seed richer context.",
         ],
         "notes": [
             "OpenAI supports API key authentication with Basic, Bearer, or Custom header modes for GPT Actions.",
@@ -219,8 +313,10 @@ def build_gpt_actions_setup_guide(config, *, server_url: str | None = None) -> d
         ],
         "instruction_template": (
             "Before starting project work, call getKnowledgeHubReadyForNextChat with the project slug. "
-            "Use the returned text as the current source of truth. When the work is complete, call "
-            "ingestKnowledgeHubSessionLog with a compact session summary JSON."
+            "Use the returned text as the current source of truth. If the project does not exist yet or the handoff "
+            "is too sparse, call ingestKnowledgeHubProjectPackage to seed the project metadata, snapshot, prompts, "
+            "and starting session log. When the work is complete, call ingestKnowledgeHubSessionLog with a compact "
+            "session summary JSON."
         ),
     }
 

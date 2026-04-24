@@ -501,6 +501,11 @@ def gpt_actions_session_log():
     return chat_ingest_session()
 
 
+@bp.post("/gpt-actions/project-package")
+def gpt_actions_project_package():
+    return import_project_package_api()
+
+
 @bp.post("/prompt-templates/import")
 def import_prompt_templates_api():
     db_session = get_session()

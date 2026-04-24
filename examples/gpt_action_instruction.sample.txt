@@ -1,6 +1,15 @@
 Before starting project work, call `getKnowledgeHubReadyForNextChat` with the project slug.
 Use the returned text as the current source of truth for the project.
 
+If the project does not exist yet or the handoff is too sparse, call `ingestKnowledgeHubProjectPackage`
+to seed:
+- project metadata
+- current_goal
+- rules
+- snapshot
+- prompt templates
+- optional starting session log
+
 When the work is complete, call `ingestKnowledgeHubSessionLog` with a compact JSON summary:
 - task
 - summary

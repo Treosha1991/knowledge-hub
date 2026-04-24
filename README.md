@@ -152,6 +152,7 @@ GET /api/gpt-actions/openapi.json
 GET /api/gpt-actions/projects
 GET /api/gpt-actions/projects/<slug>/ready-for-next-chat
 POST /api/gpt-actions/session-log
+POST /api/gpt-actions/project-package
 ```
 
 Authentication pages:

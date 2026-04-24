@@ -29,10 +29,13 @@
             <div><strong>Schema URL:</strong> <code>{{ setup.schema_url }}</code></div>
             <div><strong>Token UI:</strong> <code>{{ setup.token_ui_url }}</code></div>
         </div>
-        <div class="note-block">
-            {{ setup.authentication.token_value_hint }}
-        </div>
-    </article>
+    <div class="note-block">
+        {{ setup.authentication.token_value_hint }}
+    </div>
+    <div class="note-block">
+        If the GPT says a project is missing or its handoff is too thin, use the project-package action first.
+    </div>
+</article>
 
     <article class="panel">
         <div class="panel-header">
