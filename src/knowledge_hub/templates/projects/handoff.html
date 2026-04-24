@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Ready For Next Chat</p>
+        <h1>{{ project.name }}</h1>
+        <p class="lead">This page is optimized for fast handoff into a new AI chat. Copy the text below as-is, or open the text endpoint directly.</p>
+    </div>
+    <div class="header-actions">
+        <span class="pill">{{ project.status }}</span>
+        <a class="button button-secondary" href="{{ url_for('projects.detail', slug=project.slug) }}">Back To Project</a>
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Handoff Summary</h2>
+            <span class="pill">{{ handoff.handoff_updated_at }}</span>
+        </div>
+        <div class="meta-stack">
+            <div><strong>Project:</strong> {{ handoff.project.name }}</div>
+            <div><strong>Slug:</strong> {{ handoff.project.slug }}</div>
+            <div><strong>Status:</strong> {{ handoff.project.status or "Not set" }}</div>
+            <div><strong>Current goal:</strong> {{ handoff.project.current_goal or "Not set" }}</div>
+            <div><strong>Updated at:</strong> {{ handoff.project.updated_at or "-" }}</div>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Quick Actions</h2>
+        </div>
+        <div class="button-stack">
+            <button class="button button-primary js-copy-handoff" type="button" data-target="ready-handoff-output">Copy Handoff Text</button>
+            <a class="button button-secondary" href="{{ url_for('api.ready_for_next_chat_text', slug=project.slug) }}" target="_blank" rel="noopener">Open Plain Text</a>
+            <a class="button button-secondary" href="{{ url_for('api.ready_for_next_chat', slug=project.slug) }}" target="_blank" rel="noopener">Open JSON Payload</a>
+        </div>
+        <p class="helper-text" id="copy-status">Use this page when you want the shortest reliable handoff without opening the API manually.</p>
+    </article>
+</section>
+
+<section class="panel handoff-panel">
+    <div class="panel-header">
+        <h2>Copy-Friendly Handoff</h2>
+        <span class="pill">ready-for-next-chat</span>
+    </div>
+    <textarea id="ready-handoff-output" class="handoff-output" rows="20" readonly>{{ handoff.text }}</textarea>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Related Exports</h2>
+    </div>
+    <div class="automation-grid">
+        <div class="note-block">
+            <strong>Ready For Next Chat Text</strong>
+            <div class="api-link">{{ url_for('api.ready_for_next_chat_text', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Chat Bootstrap File</strong>
+            <div class="api-link">{{ handoff.export_paths.chat_bootstrap_text }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Assistant-Ready File</strong>
+            <div class="api-link">{{ handoff.export_paths.assistant_ready_text }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Context Pack File</strong>
+            <div class="api-link">{{ handoff.export_paths.context_pack_text }}</div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("click", async (event) => {
+    const button = event.target.closest(".js-copy-handoff");
+    if (!button) {
+        return;
+    }
+
+    const targetId = button.getAttribute("data-target");
+    const textarea = document.getElementById(targetId);
+    const status = document.getElementById("copy-status");
+    if (!textarea) {
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(textarea.value);
+        textarea.focus();
+        textarea.select();
+        if (status) {
+            status.textContent = "Handoff copied to clipboard.";
+        }
+    } catch (_error) {
+        textarea.focus();
+        textarea.select();
+        if (status) {
+            status.textContent = "Clipboard permission was unavailable. The handoff text is selected, so you can copy it manually.";
+        }
+    }
+});
+</script>
+{% endblock %}

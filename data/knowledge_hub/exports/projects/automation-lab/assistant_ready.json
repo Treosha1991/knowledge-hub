@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-04-23T21:26:19.708804+00:00",
+  "project": {
+    "slug": "automation-lab",
+    "name": "Automation Lab",
+    "status": "active",
+    "description": "Auto-created from session log import.",
+    "stack": null,
+    "current_goal": null,
+    "rules": null,
+    "updated_at": "2026-04-21T19:42:51"
+  },
+  "focus": {
+    "recommended_next_step": "Перезапустить сервер и проверить новые страницы",
+    "active_blockers": [
+      "Need restart after code changes"
+    ],
+    "recent_tags": [
+      "automation",
+      "mvp",
+      "context-pack",
+      "api",
+      "test"
+    ]
+  },
+  "latest_snapshot": null,
+  "recent_session_notes": [
+    {
+      "id": 1,
+      "task": "Собрать automation-first память для AI сессий",
+      "summary": "Добавлены JSON import, API и context pack.",
+      "next_step": "Перезапустить сервер и проверить новые страницы",
+      "created_at": "2026-04-21T19:42:51"
+    },
+    {
+      "id": 2,
+      "task": "Проверить API import",
+      "summary": "API import работает через Flask test client.",
+      "next_step": "Перезапустить локальный сервер",
+      "created_at": "2026-04-21T19:42:51"
+    }
+  ],
+  "selected_prompt_template": null
+}

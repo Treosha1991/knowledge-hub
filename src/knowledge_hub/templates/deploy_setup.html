@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Production Path</p>
+        <h1>Deploy Setup Guide</h1>
+        <p class="lead">A copy-friendly Render setup plan for real SMTP delivery first, then private sign-in mode.</p>
+    </div>
+    <div class="header-actions">
+        <a class="button button-secondary" href="{{ url_for('api.deploy_setup') }}">Open JSON</a>
+        <a class="button button-secondary" href="{{ url_for('main.deploy_env') }}">Open Env Status</a>
+        <a class="button button-secondary" href="{{ url_for('main.deploy_readiness') }}">Back To Readiness</a>
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Phase 1</h2>
+            <span class="pill">SMTP first</span>
+        </div>
+        <p class="helper-text">Set these env vars on Render first. Keep sign-in optional until one real email works.</p>
+        <div class="code-list">
+            {% for item in setup.phase_one_env %}
+                <code>{{ item.key }}={{ item.value }}</code>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Phase 2</h2>
+            <span class="pill">Private mode</span>
+        </div>
+        <p class="helper-text">Only enable this after SMTP and magic-link delivery are confirmed.</p>
+        <div class="code-list">
+            {% for item in setup.phase_two_env %}
+                <code>{{ item.key }}={{ item.value }}</code>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Safe Rollout</h2>
+    </div>
+    <div class="item-list">
+        {% for item in setup.safe_rollout_steps %}
+            <div class="item-card">{{ item }}</div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Blocking Gaps</h2>
+            <span class="pill">{{ setup.blocking_gaps | length }}</span>
+        </div>
+        {% if setup.blocking_gaps %}
+            <div class="item-list">
+                {% for item in setup.blocking_gaps %}
+                    <div class="item-card">{{ item }}</div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No blocking gaps right now.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Current Public URL</h2>
+            <span class="pill">{{ "ready" if setup.public_base_url_ready else "needs update" }}</span>
+        </div>
+        <div class="meta-stack">
+            <div><strong>Base URL:</strong> {{ setup.public_base_url }}</div>
+            <div><strong>Mail backend:</strong> {{ setup.mail_backend }}</div>
+            <div><strong>Auth required:</strong> {{ "Yes" if setup.auth_required else "No" }}</div>
+        </div>
+    </article>
+</section>
+{% endblock %}

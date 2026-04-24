@@ -1,0 +1,10 @@
+You are joining ongoing work on the project 'Inbox Lab' (inbox-lab).
+Current goal: Validate inbox automation
+Recommended next step: Check the processed folder and context pack
+Active blockers: none recorded.
+Project rules: no special rules captured yet.
+Latest snapshot: Inbox processing now imports a full project package from the pending folder.
+Recent decisions:
+- A pending JSON file should be imported and moved automatically.
+Preferred chat instruction: Read the latest context pack and focus on the current goal.
+Do not ask to restate the basic context. Continue from this state and move the work forward.

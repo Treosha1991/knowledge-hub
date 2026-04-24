@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-04-23T21:26:19.710317+00:00",
+  "project": {
+    "id": 1,
+    "slug": "automation-lab",
+    "name": "Automation Lab",
+    "description": "Auto-created from session log import.",
+    "stack": null,
+    "status": "active",
+    "current_goal": null,
+    "rules": null,
+    "created_at": "2026-04-21T19:42:51",
+    "updated_at": "2026-04-21T19:42:51"
+  },
+  "latest_snapshot": null,
+  "recent_snapshots": [],
+  "recent_logs": [
+    {
+      "id": 1,
+      "source": "codex",
+      "task": "Собрать automation-first память для AI сессий",
+      "summary": "Добавлены JSON import, API и context pack.",
+      "actions_taken": [
+        "Created automation service layer",
+        "Added CLI tools"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/session_import.py",
+        "tools/context_pack.py"
+      ],
+      "blockers": [
+        "Need restart after code changes"
+      ],
+      "next_step": "Перезапустить сервер и проверить новые страницы",
+      "tags": [
+        "automation",
+        "mvp",
+        "context-pack"
+      ],
+      "created_at": "2026-04-21T19:42:51"
+    },
+    {
+      "id": 2,
+      "source": "chatgpt",
+      "task": "Проверить API import",
+      "summary": "API import работает через Flask test client.",
+      "actions_taken": [
+        "Ran automated test"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/blueprints/api.py"
+      ],
+      "blockers": [],
+      "next_step": "Перезапустить локальный сервер",
+      "tags": [
+        "api",
+        "test"
+      ],
+      "created_at": "2026-04-21T19:42:51"
+    }
+  ],
+  "prompt_templates": [],
+  "derived": {
+    "active_blockers": [
+      "Need restart after code changes"
+    ],
+    "recent_tags": [
+      "automation",
+      "mvp",
+      "context-pack",
+      "api",
+      "test"
+    ],
+    "files_touched": [
+      "src/knowledge_hub/services/session_import.py",
+      "tools/context_pack.py",
+      "src/knowledge_hub/blueprints/api.py"
+    ],
+    "next_steps": [
+      "Перезапустить сервер и проверить новые страницы",
+      "Перезапустить локальный сервер"
+    ],
+    "recommended_next_step": "Перезапустить сервер и проверить новые страницы"
+  }
+}

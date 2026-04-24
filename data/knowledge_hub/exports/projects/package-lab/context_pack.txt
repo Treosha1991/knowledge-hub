@@ -1,0 +1,39 @@
+Knowledge Hub Context Pack
+Generated at: 2026-04-23T21:26:19.700886+00:00
+
+Project
+- Name: Package Lab
+- Slug: package-lab
+- Status: active
+- Stack: Not set
+- Current goal: Test unified package import
+- Description: Project imported through a single package.
+
+Project Rules
+Prefer automation over manual entry.
+
+Recommended Next Step
+Проверить context pack после package import
+
+Active Blockers
+- None recorded.
+
+Recent Tags
+- package
+- automation
+
+Files Touched Recently
+- None recorded.
+
+Latest Snapshot
+- Title: Текущее состояние
+Package import уже объединяет project, session logs, prompt templates и snapshots.
+
+Recent Session Logs
+- 2026-04-22T18:08:49 | chatgpt | Проверить package import
+  Summary: Один JSON импортирует проект, логи, prompts и snapshots.
+  Next step: Проверить context pack после package import
+
+Reusable Prompt Templates
+- Старт нового чата [new_chat]
+Сначала прочитай context pack и ответь коротко по текущему next step.

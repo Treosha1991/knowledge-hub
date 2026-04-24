@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Project</p>
+        <h1>{{ project.name }}</h1>
+        <p class="lead">{{ project.description or "No description yet." }}</p>
+    </div>
+    <div class="header-actions">
+        <span class="pill">{{ project.status }}</span>
+        <a class="button button-primary" href="{{ url_for('projects.handoff_page', slug=project.slug) }}">Open Handoff Page</a>
+        <a class="button button-secondary" href="{{ url_for('projects.index') }}">All Projects</a>
+    </div>
+</section>
+
+<section class="info-grid">
+    <article class="panel">
+        <h2>Core Context</h2>
+        <div class="meta-stack">
+            <div><strong>Workspace:</strong>
+                {% if project.workspace %}
+                    <a class="text-link" href="{{ url_for('workspaces.detail', slug=project.workspace.slug) }}">{{ project.workspace.name }}</a>
+                {% else %}
+                    Not set
+                {% endif %}
+            </div>
+            <div><strong>Slug:</strong> {{ project.slug }}</div>
+            <div><strong>Stack:</strong> {{ project.stack or "Not set" }}</div>
+            <div><strong>Current goal:</strong> {{ project.current_goal or "Not set" }}</div>
+            <div><strong>Next step:</strong> {{ next_step or "Not captured yet" }}</div>
+        </div>
+    </article>
+    <article class="panel">
+        <h2>Project Rules</h2>
+        <div class="note-block">{{ project.rules or "No project rules yet." }}</div>
+    </article>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Latest Session Logs</h2>
+            <a class="text-link" href="{{ url_for('session_logs.create', project=project.slug) }}">Add log</a>
+        </div>
+        {% if recent_logs %}
+            <div class="item-list">
+                {% for log in recent_logs %}
+                    <div class="item-card">
+                        <strong>{{ log.task or "Untitled session" }}</strong>
+                        <span>{{ log.summary or "No summary yet." }}</span>
+                        <span class="muted">{{ log.created_at.strftime('%Y-%m-%d %H:%M') if log.created_at else "-" }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No session logs yet.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Prompt Templates</h2>
+            <a class="text-link" href="{{ url_for('prompt_templates.create', project=project.slug) }}">Add template</a>
+        </div>
+        {% if recent_prompts %}
+            <div class="item-list">
+                {% for item in recent_prompts %}
+                    <div class="item-card">
+                        <strong>{{ item.title }}</strong>
+                        <span>{{ item.type }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No prompt templates yet.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Snapshots</h2>
+            <a class="text-link" href="{{ url_for('snapshots.create', project=project.slug) }}">Add snapshot</a>
+        </div>
+        {% if recent_snapshots %}
+            <div class="item-list">
+                {% for item in recent_snapshots %}
+                    <div class="item-card">
+                        <strong>{{ item.title }}</strong>
+                        <span class="muted">{{ item.updated_at.strftime('%Y-%m-%d %H:%M') if item.updated_at else "-" }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No snapshots yet.</p>
+            </div>
+        {% endif %}
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Recent Automation Activity</h2>
+        <a class="text-link" href="{{ url_for('api.project_automation_events', slug=project.slug, _external=True) }}">JSON feed</a>
+    </div>
+    {% if recent_automation_events %}
+        <div class="item-list">
+            {% for item in recent_automation_events %}
+                <div class="item-card">
+                    <strong>{{ item.event_type }}</strong>
+                    <span>{{ item.created_at }} | {{ item.source }} | {{ item.status }}</span>
+                    <span>{{ item.message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state compact">
+            <p>No automation events recorded for this project yet.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Project Ops</h2>
+        <span class="pill">{{ duplicate_group_count }} duplicate groups</span>
+    </div>
+    <div class="ops-grid">
+        <article class="ops-card">
+            <h3>Rebuild Project Exports</h3>
+            <p>Refresh all generated export files for this project, including `chat_bootstrap`, `assistant_ready`, and `context_pack`.</p>
+            <form method="post" action="{{ url_for('projects.rebuild_exports', slug=project.slug) }}" class="button-stack">
+                <button class="button button-secondary" type="submit">Rebuild Exports</button>
+            </form>
+        </article>
+
+        <article class="ops-card">
+            <h3>Dedupe Dry Run</h3>
+            <p>Check whether this project still has exact duplicate session logs before making any cleanup changes.</p>
+            <div class="helper-text">Currently detected: {{ duplicate_group_count }} duplicate group(s), {{ duplicate_log_count }} removable log(s).</div>
+            <form method="post" action="{{ url_for('projects.dedupe_dry_run', slug=project.slug) }}" class="button-stack">
+                <button class="button button-secondary" type="submit">Run Dry Check</button>
+            </form>
+        </article>
+
+        <article class="ops-card">
+            <h3>Apply Dedupe</h3>
+            <p>Remove exact duplicate session logs for this project and refresh the export bundle immediately after cleanup.</p>
+            <div class="helper-text">Safe target: only exact duplicate raw JSON payloads are removed.</div>
+            <form method="post" action="{{ url_for('projects.dedupe_apply', slug=project.slug) }}" class="button-stack">
+                <button class="button button-danger" type="submit">Remove Exact Duplicates</button>
+            </form>
+        </article>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Automation</h2>
+    </div>
+    <div class="automation-grid">
+        <div class="note-block">
+            <strong>Import API</strong>
+            <div class="api-link">{{ url_for('api.import_session_logs_api', _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Context Pack JSON</strong>
+            <div class="api-link">{{ url_for('api.context_pack', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Context Pack Text</strong>
+            <div class="api-link">{{ url_for('api.context_pack_text', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Ready For Next Chat</strong>
+            <div class="api-link">{{ url_for('api.ready_for_next_chat_text', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Copy-Friendly Handoff Page</strong>
+            <div class="api-link">{{ url_for('projects.handoff_page', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Chat Bootstrap Text</strong>
+            <div class="api-link">{{ url_for('api.chat_bootstrap_text', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Assistant-Ready Text</strong>
+            <div class="api-link">{{ url_for('api.assistant_ready_text', slug=project.slug, _external=True) }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Export Folder</strong>
+            <div class="api-link">{{ export_paths.root }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Chat Bootstrap File</strong>
+            <div class="api-link">{{ export_paths.chat_bootstrap_text }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Assistant-Ready File</strong>
+            <div class="api-link">{{ export_paths.assistant_ready_text }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Context Pack File</strong>
+            <div class="api-link">{{ export_paths.context_pack_text }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Project Package Import</strong>
+            <div class="api-link">{{ url_for('api.import_project_package_api', _external=True) }}</div>
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Chat Bootstrap Export</h2>
+        <span class="pill">{{ chat_bootstrap_pack.recent_decisions | length }} decisions</span>
+    </div>
+    <textarea class="bootstrap-output" rows="14" readonly>{{ chat_bootstrap_text }}</textarea>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Assistant-Ready Export</h2>
+        <span class="pill">{{ assistant_ready_pack.recent_session_notes | length }} notes</span>
+    </div>
+    <textarea class="assistant-output" rows="18" readonly>{{ assistant_ready_text }}</textarea>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Generated Context Pack</h2>
+        <span class="pill">{{ context_pack.recent_logs | length }} recent logs</span>
+    </div>
+    <textarea class="context-pack-output" rows="22" readonly>{{ context_pack_text }}</textarea>
+</section>
+{% endblock %}

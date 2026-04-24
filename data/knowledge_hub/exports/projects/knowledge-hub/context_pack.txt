@@ -1,0 +1,117 @@
+Knowledge Hub Context Pack
+Generated at: 2026-04-23T21:26:37.304081+00:00
+
+Project
+- Name: Knowledge Hub
+- Slug: knowledge-hub
+- Status: active
+- Stack: Flask, SQLAlchemy, SQLite, Render
+- Current goal: Move from internal alpha toward calmer production deploy readiness with strong automation.
+- Description: Internal memory and handoff service for AI-assisted work sessions.
+
+Project Rules
+Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.
+
+Recommended Next Step
+Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.
+
+Active Blockers
+- Real Render values are still missing for public base URL, SMTP host, owner email, and secret key
+- Production SMTP is still not verified end-to-end against the live service
+- Real Render env values still need to be set for public base URL, SMTP, owner email, and secret key
+- There is still no verified production SMTP provider configured against the live service
+- Render production still needs real SMTP before KH_AUTH_REQUIRED can be enabled safely
+- Owner email and secret key are still placeholder values in the current local baseline
+- A real SMTP provider is still not configured in production env vars
+- Render still uses placeholder mail sender and owner settings
+- Mail sender address still uses a local placeholder domain
+- There is still no real external email provider yet
+- Production config still uses placeholder owner email and local dev secret
+- Magic link is shown in the UI directly and is not sent by email yet
+- Still no real authentication or login flow
+- Secret key is still default in local development
+- Default owner email still uses placeholder local value
+
+Recent Tags
+- deploy
+- env
+- render
+- smtp
+- production
+- public-base-url
+- auth
+- private-mode
+- magic-link
+- mail
+- email
+- outbox
+- dogfood
+- login
+- session
+- workspace
+- access-control
+- saas-foundation
+- readiness
+
+Files Touched Recently
+- src/knowledge_hub/services/deploy_env_status.py
+- src/knowledge_hub/templates/deploy_env_status.html
+- src/knowledge_hub/blueprints/main.py
+- tools/deploy_env_status.py
+- src/knowledge_hub/services/public_urls.py
+- src/knowledge_hub/services/deploy_setup.py
+- src/knowledge_hub/services/deploy_readiness.py
+- tools/deploy_setup.py
+- src/knowledge_hub/services/access.py
+- src/knowledge_hub/app.py
+- src/knowledge_hub/blueprints/auth.py
+- src/knowledge_hub/services/mail.py
+- tools/send_test_email.py
+- src/knowledge_hub/blueprints/api.py
+- src/knowledge_hub/config.py
+- src/knowledge_hub/services/auth.py
+- src/knowledge_hub/models.py
+- src/knowledge_hub/blueprints/workspaces.py
+- tools/deploy_readiness.py
+
+Latest Snapshot
+- Title: Current internal state
+Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.
+
+Recent Session Logs
+- 2026-04-23T21:26:33 | codex | Add a production env status page for Render-facing configuration
+  Summary: Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.
+  Actions: Added deploy env status service with phase-one and phase-two grouping, Added deploy env page, API endpoint, and CLI wrappers, Linked env status into the home, readiness, and setup flow
+  Next step: Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.
+- 2026-04-23T20:19:05 | codex | Add public-base-url handling and a Render deploy setup guide
+  Summary: Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.
+  Actions: Added KH_PUBLIC_BASE_URL support to external magic-link URLs, Added deploy setup page, API, and CLI with phased Render env blocks, Extended readiness to fail production when public base URL is missing or local
+  Next step: Add one production env status page that makes the remaining real Render values impossible to miss before the first live deploy.
+- 2026-04-23T20:10:21 | codex | Add auth-required private mode on top of magic-link login
+  Summary: Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.
+  Actions: Added KH_AUTH_REQUIRED enforcement for private HTML and API routes, Added login redirects with next return path preservation, Extended deploy readiness to catch auth-plus-file-mail lockout risk
+  Next step: Prepare the first provider-ready Render email setup path and tighten the deploy checklist around real production env values.
+- 2026-04-23T20:06:23 | codex | Add the first real SMTP delivery path for magic-link login
+  Summary: Knowledge Hub now supports SMTP delivery, SMTP readiness checks, and a safe test-email CLI without removing the file outbox fallback.
+  Actions: Added SMTP backend support to the mail service layer, Added SMTP config checks to deploy readiness, Added send_test_email CLI for calm delivery verification
+  Next step: Configure a real SMTP provider on Render and verify one real magic-link delivery end-to-end.
+- 2026-04-23T19:23:40 | codex | Add file-outbox email delivery for magic-link login
+  Summary: Added a mail service with file outbox delivery, mail status API, and login flow that now delivers links through the configured backend instead of showing the raw link directly.
+  Actions: Added file outbox mail backend, Connected magic-link login to mail delivery, Surfaced mail status in API, home UI, and deploy readiness
+  Next step: Move from file outbox delivery to the first calmer external email integration path.
+- 2026-04-23T19:09:29 | codex | Add the first real magic-link login slice
+  Summary: Added one-time login tokens, session-based actor resolution, sign-in/sign-out routes, and a UI login page.
+  Actions: Added login token model and auth service, Added magic-link login page and session sign-in, Integrated session actor into request access resolution
+  Next step: Move from local magic-link login to the first calmer email-delivery or external auth integration path.
+- 2026-04-23T19:06:33 | codex | Add the first auth-ready workspace access slice
+  Summary: Added current actor resolution, dev actor override, membership-scoped workspace/project access, and owner/admin member management.
+  Actions: Resolved a current actor for every request, Scoped workspace and project views by membership, Added member management from workspace detail and API
+  Next step: Move from auth-ready access control into the first real login/authentication slice.
+- 2026-04-23T18:55:25 | codex | Add deploy-readiness checklist for calmer production rollout
+  Summary: Added deploy-readiness checks with pass/warn/fail status across config, storage, secrets, Render baseline, and owner bootstrap.
+  Actions: Added deploy readiness service, Added deploy readiness page, API, and CLI, Surfaced readiness summary on the home page
+  Next step: Move from deploy-readiness visibility into the first real auth slice for workspace access.
+
+Reusable Prompt Templates
+- Continue Knowledge Hub work [new_chat]
+Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.

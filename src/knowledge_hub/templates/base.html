@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title or app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="{{ url_for('main.home') }}">Knowledge Hub</a>
+            <nav class="main-nav">
+                {% if current_actor or not auth_required %}
+                    <a href="{{ url_for('main.deploy_readiness') }}">Deploy Readiness</a>
+                    <a href="{{ url_for('workspaces.index') }}">Workspaces</a>
+                    <a href="{{ url_for('projects.index') }}">Projects</a>
+                    <a href="{{ url_for('session_logs.index') }}">Session Logs</a>
+                    <a href="{{ url_for('session_logs.create') }}">Import JSON</a>
+                    <a href="{{ url_for('prompt_templates.index') }}">Prompt Templates</a>
+                    <a href="{{ url_for('snapshots.index') }}">Snapshots</a>
+                {% endif %}
+                {% if current_actor_source == "session" %}
+                    <form method="post" action="{{ url_for('auth.logout') }}" class="inline-form">
+                        <button class="nav-button" type="submit">Sign Out</button>
+                    </form>
+                {% else %}
+                    <a href="{{ url_for('auth.login', next=request.path if auth_required else None) }}">Sign In</a>
+                {% endif %}
+            </nav>
+        </div>
+        {% if current_actor %}
+            <div class="header-inner actor-bar">
+                <div class="muted">
+                    Acting as <strong>{{ current_actor.display_name }}</strong> ({{ current_actor.email }})
+                    {% if current_actor_source == "request_override" %}
+                        via dev override
+                        <a class="text-link" href="{{ request.path }}?clear_actor=1">reset</a>
+                    {% endif %}
+                </div>
+                <div class="muted">
+                    {{ accessible_workspaces | length }} accessible workspace{{ "" if accessible_workspaces | length == 1 else "s" }}
+                </div>
+            </div>
+        {% elif auth_required %}
+            <div class="header-inner actor-bar">
+                <div class="muted">
+                    Private mode is enabled. Sign in to access your workspace data.
+                </div>
+            </div>
+        {% endif %}
+    </header>
+
+    <main class="page-shell">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

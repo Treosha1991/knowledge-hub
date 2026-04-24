@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-04-23T21:26:37.301941+00:00",
+  "project": {
+    "slug": "knowledge-hub",
+    "name": "Knowledge Hub",
+    "status": "active",
+    "description": "Internal memory and handoff service for AI-assisted work sessions.",
+    "stack": "Flask, SQLAlchemy, SQLite, Render",
+    "current_goal": "Move from internal alpha toward calmer production deploy readiness with strong automation.",
+    "rules": "Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "focus": {
+    "recommended_next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+    "active_blockers": [
+      "Real Render values are still missing for public base URL, SMTP host, owner email, and secret key",
+      "Production SMTP is still not verified end-to-end against the live service",
+      "Real Render env values still need to be set for public base URL, SMTP, owner email, and secret key",
+      "There is still no verified production SMTP provider configured against the live service",
+      "Render production still needs real SMTP before KH_AUTH_REQUIRED can be enabled safely",
+      "Owner email and secret key are still placeholder values in the current local baseline",
+      "A real SMTP provider is still not configured in production env vars",
+      "Render still uses placeholder mail sender and owner settings"
+    ],
+    "recent_tags": [
+      "deploy",
+      "env",
+      "render",
+      "smtp",
+      "production",
+      "public-base-url",
+      "auth",
+      "private-mode",
+      "magic-link",
+      "mail"
+    ]
+  },
+  "latest_snapshot": {
+    "id": 5,
+    "title": "Current internal state",
+    "content": "Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "recent_session_notes": [
+    {
+      "id": 18,
+      "task": "Add a production env status page for Render-facing configuration",
+      "summary": "Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.",
+      "next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+      "created_at": "2026-04-23T21:26:33"
+    },
+    {
+      "id": 17,
+      "task": "Add public-base-url handling and a Render deploy setup guide",
+      "summary": "Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.",
+      "next_step": "Add one production env status page that makes the remaining real Render values impossible to miss before the first live deploy.",
+      "created_at": "2026-04-23T20:19:05"
+    },
+    {
+      "id": 16,
+      "task": "Add auth-required private mode on top of magic-link login",
+      "summary": "Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.",
+      "next_step": "Prepare the first provider-ready Render email setup path and tighten the deploy checklist around real production env values.",
+      "created_at": "2026-04-23T20:10:21"
+    },
+    {
+      "id": 15,
+      "task": "Add the first real SMTP delivery path for magic-link login",
+      "summary": "Knowledge Hub now supports SMTP delivery, SMTP readiness checks, and a safe test-email CLI without removing the file outbox fallback.",
+      "next_step": "Configure a real SMTP provider on Render and verify one real magic-link delivery end-to-end.",
+      "created_at": "2026-04-23T20:06:23"
+    }
+  ],
+  "selected_prompt_template": {
+    "id": 5,
+    "type": "new_chat",
+    "title": "Continue Knowledge Hub work",
+    "content": "Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.",
+    "updated_at": "2026-04-23T18:06:45"
+  }
+}

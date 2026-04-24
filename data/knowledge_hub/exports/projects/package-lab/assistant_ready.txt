@@ -1,0 +1,31 @@
+Assistant-Ready Project Brief
+Generated at: 2026-04-23T21:26:19.699371+00:00
+
+Project
+- Name: Package Lab
+- Slug: package-lab
+- Status: active
+- Current goal: Test unified package import
+- Description: Project imported through a single package.
+- Stack: Not set
+
+Rules
+Prefer automation over manual entry.
+
+Immediate Focus
+- Recommended next step: Проверить context pack после package import
+- Active blockers: none recorded
+- Recent tags: package, automation
+
+Latest Snapshot
+- Title: Текущее состояние
+Package import уже объединяет project, session logs, prompt templates и snapshots.
+
+Recent Session Notes
+- Проверить package import
+  Summary: Один JSON импортирует проект, логи, prompts и snapshots.
+  Next step: Проверить context pack после package import
+
+Suggested Chat Instruction
+- Template: Старт нового чата [new_chat]
+Сначала прочитай context pack и ответь коротко по текущему next step.

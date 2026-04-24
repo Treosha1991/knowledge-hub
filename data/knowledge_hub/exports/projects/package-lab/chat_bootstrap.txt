@@ -1,0 +1,10 @@
+You are joining ongoing work on the project 'Package Lab' (package-lab).
+Current goal: Test unified package import
+Recommended next step: Проверить context pack после package import
+Active blockers: none recorded.
+Project rules: Prefer automation over manual entry.
+Latest snapshot: Package import уже объединяет project, session logs, prompt templates и snapshots.
+Recent decisions:
+- Один JSON импортирует проект, логи, prompts и snapshots.
+Preferred chat instruction: Сначала прочитай context pack и ответь коротко по текущему next step.
+Do not ask to restate the basic context. Continue from this state and move the work forward.

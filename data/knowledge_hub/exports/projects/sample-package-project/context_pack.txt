@@ -1,0 +1,47 @@
+Knowledge Hub Context Pack
+Generated at: 2026-04-23T21:26:19.691727+00:00
+
+Project
+- Name: Sample Package Project
+- Slug: sample-package-project
+- Status: active
+- Stack: Not set
+- Current goal: Verify package import end-to-end
+- Description: Bundled sample package for Knowledge Hub import checks.
+
+Project Rules
+Prefer automation over manual entry.
+
+Recommended Next Step
+Open the context pack for sample-package-project
+
+Active Blockers
+- None recorded.
+
+Recent Tags
+- sample
+- package-import
+
+Files Touched Recently
+- examples/project_package.sample.json
+
+Latest Snapshot
+- Title: Current state
+Knowledge Hub already supports package import, context pack export, and JSON import for key entities.
+
+Recent Session Logs
+- 2026-04-22T18:21:41 | chatgpt | Check the project package import flow
+  Summary: One JSON file imports the project, session log, prompt template, and snapshot.
+  Actions: Created the sample package, Ran import_project_package
+  Next step: Open the context pack for sample-package-project
+- 2026-04-22T18:20:39 | chatgpt | Проверить пакетный импорт проекта
+  Summary: Один JSON-файл импортирует проект, session log, prompt template и snapshot.
+  Actions: Создали sample package, Запустили import_project_package
+  Next step: Открыть context pack для sample-package-project
+
+Reusable Prompt Templates
+- Start a new project chat [new_chat]
+Read the context pack, list blockers, and suggest the next practical step.
+
+- Старт нового чата по проекту [new_chat]
+Прочитай context pack, перечисли blockers и предложи следующий практичный шаг.

@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-04-23T21:26:19.691727+00:00",
+  "project": {
+    "id": 3,
+    "slug": "sample-package-project",
+    "name": "Sample Package Project",
+    "description": "Bundled sample package for Knowledge Hub import checks.",
+    "stack": null,
+    "status": "active",
+    "current_goal": "Verify package import end-to-end",
+    "rules": "Prefer automation over manual entry.",
+    "created_at": "2026-04-22T18:20:39",
+    "updated_at": "2026-04-22T18:20:39"
+  },
+  "latest_snapshot": {
+    "id": 3,
+    "title": "Current state",
+    "content": "Knowledge Hub already supports package import, context pack export, and JSON import for key entities.",
+    "created_at": "2026-04-22T18:21:41",
+    "updated_at": "2026-04-22T18:21:41"
+  },
+  "recent_snapshots": [
+    {
+      "id": 3,
+      "title": "Current state",
+      "content": "Knowledge Hub already supports package import, context pack export, and JSON import for key entities.",
+      "created_at": "2026-04-22T18:21:41",
+      "updated_at": "2026-04-22T18:21:41"
+    },
+    {
+      "id": 2,
+      "title": "Текущее состояние",
+      "content": "Knowledge Hub уже умеет package import, context pack export и JSON import для ключевых сущностей.",
+      "created_at": "2026-04-22T18:20:39",
+      "updated_at": "2026-04-22T18:20:39"
+    }
+  ],
+  "recent_logs": [
+    {
+      "id": 5,
+      "source": "chatgpt",
+      "task": "Check the project package import flow",
+      "summary": "One JSON file imports the project, session log, prompt template, and snapshot.",
+      "actions_taken": [
+        "Created the sample package",
+        "Ran import_project_package"
+      ],
+      "files_touched": [
+        "examples/project_package.sample.json"
+      ],
+      "blockers": [],
+      "next_step": "Open the context pack for sample-package-project",
+      "tags": [
+        "sample",
+        "package-import"
+      ],
+      "created_at": "2026-04-22T18:21:41"
+    },
+    {
+      "id": 4,
+      "source": "chatgpt",
+      "task": "Проверить пакетный импорт проекта",
+      "summary": "Один JSON-файл импортирует проект, session log, prompt template и snapshot.",
+      "actions_taken": [
+        "Создали sample package",
+        "Запустили import_project_package"
+      ],
+      "files_touched": [
+        "examples/project_package.sample.json"
+      ],
+      "blockers": [],
+      "next_step": "Открыть context pack для sample-package-project",
+      "tags": [
+        "sample",
+        "package-import"
+      ],
+      "created_at": "2026-04-22T18:20:39"
+    }
+  ],
+  "prompt_templates": [
+    {
+      "id": 3,
+      "type": "new_chat",
+      "title": "Start a new project chat",
+      "content": "Read the context pack, list blockers, and suggest the next practical step.",
+      "created_at": "2026-04-22T18:21:41",
+      "updated_at": "2026-04-22T18:21:41"
+    },
+    {
+      "id": 2,
+      "type": "new_chat",
+      "title": "Старт нового чата по проекту",
+      "content": "Прочитай context pack, перечисли blockers и предложи следующий практичный шаг.",
+      "created_at": "2026-04-22T18:20:39",
+      "updated_at": "2026-04-22T18:20:39"
+    }
+  ],
+  "derived": {
+    "active_blockers": [],
+    "recent_tags": [
+      "sample",
+      "package-import"
+    ],
+    "files_touched": [
+      "examples/project_package.sample.json"
+    ],
+    "next_steps": [
+      "Open the context pack for sample-package-project",
+      "Открыть context pack для sample-package-project"
+    ],
+    "recommended_next_step": "Open the context pack for sample-package-project"
+  }
+}

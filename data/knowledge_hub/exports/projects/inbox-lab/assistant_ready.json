@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-04-23T21:26:19.679239+00:00",
+  "project": {
+    "slug": "inbox-lab",
+    "name": "Inbox Lab",
+    "status": "active",
+    "description": "Project created from inbox processing.",
+    "stack": null,
+    "current_goal": "Validate inbox automation",
+    "rules": null,
+    "updated_at": "2026-04-22T18:29:48"
+  },
+  "focus": {
+    "recommended_next_step": "Check the processed folder and context pack",
+    "active_blockers": [],
+    "recent_tags": [
+      "inbox",
+      "automation"
+    ]
+  },
+  "latest_snapshot": {
+    "id": 4,
+    "title": "Current state",
+    "content": "Inbox processing now imports a full project package from the pending folder.",
+    "updated_at": "2026-04-22T18:29:48"
+  },
+  "recent_session_notes": [
+    {
+      "id": 7,
+      "task": "Process an inbox package",
+      "summary": "A pending JSON file should be imported and moved automatically.",
+      "next_step": "Check the processed folder and context pack",
+      "created_at": "2026-04-22T18:29:48"
+    }
+  ],
+  "selected_prompt_template": {
+    "id": 4,
+    "type": "new_chat",
+    "title": "Inbox-driven chat start",
+    "content": "Read the latest context pack and focus on the current goal.",
+    "updated_at": "2026-04-22T18:29:48"
+  }
+}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Authentication</p>
+        <h1>Sign In With A Magic Link</h1>
+        <p class="lead">{{ mail_status.delivery_hint }}</p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    {% if errors %}
+        <div class="validation-box">
+            {% for error in errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="form-grid">
+        <label class="full-width">
+            <span>Email</span>
+            <input type="email" name="email" value="{{ form_data.email }}" required>
+        </label>
+        <input type="hidden" name="next" value="{{ form_data.next }}">
+        {% if form_data.next %}
+            <div class="note-block full-width">
+                After sign-in, Knowledge Hub will return you to <code>{{ form_data.next }}</code>.
+            </div>
+        {% endif %}
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Generate Login Link</button>
+            <a class="button button-secondary" href="{{ url_for('main.home') }}">Back</a>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Mail Delivery</h2>
+        <span class="pill">{{ mail_status.backend }}</span>
+    </div>
+    <div class="meta-stack">
+        <div><strong>From:</strong> {{ mail_status.from_name }} &lt;{{ mail_status.from_address }}&gt;</div>
+        <div><strong>Target:</strong> {{ mail_status.delivery_target }}</div>
+        <div><strong>Transport:</strong> {{ mail_status.transport }}</div>
+        {% if mail_status.backend == "smtp" %}
+            <div><strong>Auth configured:</strong> {{ "Yes" if mail_status.smtp.authentication_configured else "No" }}</div>
+            <div><strong>Username hint:</strong> {{ mail_status.smtp.username_hint or "-" }}</div>
+            <div><strong>Timeout:</strong> {{ mail_status.smtp.timeout_seconds }}s</div>
+        {% else %}
+            <div><strong>Outbox:</strong> {{ mail_status.outbox_dir }}</div>
+        {% endif %}
+    </div>
+</section>
+
+{% if delivery %}
+<section class="panel">
+    <div class="panel-header">
+        <h2>Login Link Delivered</h2>
+    </div>
+    <div class="note-block">
+        A one-time login email was delivered using the current backend.
+    </div>
+    <div class="meta-stack">
+        <div><strong>Recipient:</strong> {{ delivery.to_email }}</div>
+        <div><strong>Backend:</strong> {{ delivery.backend }}</div>
+        <div><strong>Delivered:</strong> {{ delivery.delivered_at }}</div>
+        {% if delivery.preview_path %}
+            <div><strong>Outbox file:</strong> {{ delivery.preview_path }}</div>
+        {% endif %}
+        {% if delivery.message_id %}
+            <div><strong>Message ID:</strong> {{ delivery.message_id }}</div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if mail_status.recent_messages_supported and mail_status.recent_messages %}
+<section class="panel">
+    <div class="panel-header">
+        <h2>Recent Outbox Messages</h2>
+        <span class="pill">{{ mail_status.recent_messages | length }}</span>
+    </div>
+    <div class="item-list">
+        {% for item in mail_status.recent_messages %}
+            <div class="item-card">
+                <strong>{{ item.subject }}</strong>
+                <span>{{ item.to_email }}</span>
+                <span>{{ item.created_at }}</span>
+                <span>{{ item.path }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

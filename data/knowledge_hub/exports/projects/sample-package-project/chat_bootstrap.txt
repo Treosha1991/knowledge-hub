@@ -1,0 +1,11 @@
+You are joining ongoing work on the project 'Sample Package Project' (sample-package-project).
+Current goal: Verify package import end-to-end
+Recommended next step: Open the context pack for sample-package-project
+Active blockers: none recorded.
+Project rules: Prefer automation over manual entry.
+Latest snapshot: Knowledge Hub already supports package import, context pack export, and JSON import for key entities.
+Recent decisions:
+- One JSON file imports the project, session log, prompt template, and snapshot.
+Key files touched recently: examples/project_package.sample.json.
+Preferred chat instruction: Read the context pack, list blockers, and suggest the next practical step.
+Do not ask to restate the basic context. Continue from this state and move the work forward.

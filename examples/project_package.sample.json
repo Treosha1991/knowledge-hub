@@ -1,0 +1,43 @@
+{
+  "project": {
+    "workspace_slug": "personal",
+    "slug": "sample-package-project",
+    "name": "Sample Package Project",
+    "description": "Bundled sample package for Knowledge Hub import checks.",
+    "current_goal": "Verify package import end-to-end",
+    "rules": "Prefer automation over manual entry."
+  },
+  "session_logs": [
+    {
+      "source": "chatgpt",
+      "task": "Check the project package import flow",
+      "summary": "One JSON file imports the project, session log, prompt template, and snapshot.",
+      "actions_taken": [
+        "Created the sample package",
+        "Ran import_project_package"
+      ],
+      "files_touched": [
+        "examples/project_package.sample.json"
+      ],
+      "blockers": [],
+      "next_step": "Open the context pack for sample-package-project",
+      "tags": [
+        "sample",
+        "package-import"
+      ]
+    }
+  ],
+  "prompt_templates": [
+    {
+      "type": "new_chat",
+      "title": "Start a new project chat",
+      "content": "Read the context pack, list blockers, and suggest the next practical step."
+    }
+  ],
+  "snapshots": [
+    {
+      "title": "Current state",
+      "content": "Knowledge Hub already supports package import, context pack export, and JSON import for key entities."
+    }
+  ]
+}

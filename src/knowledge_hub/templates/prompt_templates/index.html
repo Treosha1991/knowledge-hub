@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Prompt Templates</p>
+        <h1>{% if project %}Prompt templates for {{ project.name }}{% else %}Prompt template library{% endif %}</h1>
+        <p class="lead">Use API or JSON import to keep reusable prompts current and ready for the next chat.</p>
+    </div>
+    <a class="button button-primary" href="{{ url_for('prompt_templates.create', project=project_slug) }}">New Prompt Template</a>
+</section>
+
+<section class="panel">
+    {% if templates %}
+        <div class="item-list">
+            {% for item in templates %}
+                <div class="item-card">
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.project.name }}</span>
+                    <span class="pill">{{ item.type }}</span>
+                    <span>{{ item.content[:220] }}{% if item.content|length > 220 %}...{% endif %}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>No prompt templates yet</h2>
+            <p>Import a prompt template and it can flow straight into future context packs.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

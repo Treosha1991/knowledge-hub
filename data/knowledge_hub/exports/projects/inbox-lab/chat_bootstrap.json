@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-04-23T21:26:19.677559+00:00",
+  "project": {
+    "slug": "inbox-lab",
+    "name": "Inbox Lab",
+    "status": "active",
+    "description": "Project created from inbox processing.",
+    "stack": null,
+    "current_goal": "Validate inbox automation",
+    "rules": null,
+    "updated_at": "2026-04-22T18:29:48"
+  },
+  "focus": {
+    "current_goal": "Validate inbox automation",
+    "recommended_next_step": "Check the processed folder and context pack",
+    "active_blockers": [],
+    "recent_tags": [
+      "inbox",
+      "automation"
+    ],
+    "key_files": []
+  },
+  "latest_snapshot": {
+    "id": 4,
+    "title": "Current state",
+    "content": "Inbox processing now imports a full project package from the pending folder.",
+    "updated_at": "2026-04-22T18:29:48"
+  },
+  "recent_decisions": [
+    {
+      "id": 7,
+      "task": "Process an inbox package",
+      "summary": "A pending JSON file should be imported and moved automatically.",
+      "next_step": "Check the processed folder and context pack",
+      "created_at": "2026-04-22T18:29:48"
+    }
+  ],
+  "starter_template": {
+    "id": 4,
+    "type": "new_chat",
+    "title": "Inbox-driven chat start",
+    "content": "Read the latest context pack and focus on the current goal.",
+    "updated_at": "2026-04-22T18:29:48"
+  },
+  "bootstrap_text": "You are joining ongoing work on the project 'Inbox Lab' (inbox-lab).\nCurrent goal: Validate inbox automation\nRecommended next step: Check the processed folder and context pack\nActive blockers: none recorded.\nProject rules: no special rules captured yet.\nLatest snapshot: Inbox processing now imports a full project package from the pending folder.\nRecent decisions:\n- A pending JSON file should be imported and moved automatically.\nPreferred chat instruction: Read the latest context pack and focus on the current goal.\nDo not ask to restate the basic context. Continue from this state and move the work forward."
+}

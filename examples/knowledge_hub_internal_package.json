@@ -1,0 +1,50 @@
+{
+  "project": {
+    "workspace_slug": "personal",
+    "slug": "knowledge-hub",
+    "name": "Knowledge Hub",
+    "description": "Internal memory and handoff service for AI-assisted work sessions.",
+    "stack": "Flask, SQLAlchemy, SQLite, Render",
+    "status": "active",
+    "current_goal": "Move from internal alpha toward calmer production deploy readiness with strong automation.",
+    "rules": "Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth."
+  },
+  "session_logs": [
+    {
+      "source": "codex",
+      "task": "Strengthen production baseline and dogfood the service itself",
+      "summary": "Added watcher automation, backups, scheduler helpers, handoff pages, and started preparing a calmer Render deployment path.",
+      "actions_taken": [
+        "Added inbox watcher status and Task Scheduler helpers",
+        "Added backup archive creation and daily backup task helpers",
+        "Added copy-friendly handoff page"
+      ],
+      "files_touched": [
+        "render.yaml",
+        "wsgi.py",
+        "README.md"
+      ],
+      "blockers": [],
+      "next_step": "Finish Render-ready production baseline and then plan the first multi-user SaaS slice.",
+      "tags": [
+        "knowledge-hub",
+        "dogfooding",
+        "production",
+        "automation"
+      ]
+    }
+  ],
+  "prompt_templates": [
+    {
+      "type": "new_chat",
+      "title": "Continue Knowledge Hub work",
+      "content": "Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement."
+    }
+  ],
+  "snapshots": [
+    {
+      "title": "Current internal state",
+      "content": "Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages."
+    }
+  ]
+}

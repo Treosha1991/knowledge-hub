@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-card">
+    <div>
+        <p class="eyebrow">Internal memory system</p>
+        <h1>Keep project context, AI session summaries, and reusable prompts in one place with minimal manual work.</h1>
+        <p class="lead">
+            Knowledge Hub is the system of record for your ChatGPT, Codex, and manual work sessions. The default flow is JSON import, API access, and generated context packs.
+        </p>
+    </div>
+    <div class="hero-actions">
+        <a class="button button-primary" href="{{ url_for('session_logs.create') }}">Import Session JSON</a>
+        <a class="button button-secondary" href="{{ url_for('projects.create') }}">Create Project</a>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span class="stat-label">Workspaces</span>
+        <strong class="stat-value">{{ workspace_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Users</span>
+        <strong class="stat-value">{{ user_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Memberships</span>
+        <strong class="stat-value">{{ membership_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Projects</span>
+        <strong class="stat-value">{{ project_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Session Logs</span>
+        <strong class="stat-value">{{ session_log_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Prompt Templates</span>
+        <strong class="stat-value">{{ prompt_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Snapshots</span>
+        <strong class="stat-value">{{ snapshot_count }}</strong>
+    </article>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Recent Projects</h2>
+            <a class="text-link" href="{{ url_for('projects.index') }}">View all</a>
+        </div>
+        {% if recent_projects %}
+            <div class="item-list">
+                {% for project in recent_projects %}
+                    <a class="item-card" href="{{ url_for('projects.detail', slug=project.slug) }}">
+                        <strong>{{ project.name }}</strong>
+                        <span>{{ project.slug }}</span>
+                        <span>{{ project.workspace.name if project.workspace else "No workspace" }}</span>
+                        <span class="pill">{{ project.status }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No projects yet</h3>
+                <p>Create the first project to start storing context and session history.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Recent Session Logs</h2>
+            <a class="text-link" href="{{ url_for('session_logs.index') }}">View all</a>
+        </div>
+        {% if recent_logs %}
+            <div class="item-list">
+                {% for log in recent_logs %}
+                    <div class="item-card">
+                        <strong>{{ log.task or "Untitled session" }}</strong>
+                        <span>{{ log.project.name }}</span>
+                        <span>{{ log.source }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No session logs yet</h3>
+                <p>Drop a JSON file into the inbox or import one through the API to start building shared memory.</p>
+            </div>
+        {% endif %}
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Deploy Readiness</h2>
+        <a class="text-link" href="{{ url_for('main.deploy_readiness') }}">Open checklist</a>
+    </div>
+    <div class="split-grid">
+        <div class="note-block">
+            <strong>Overall</strong>
+            <div>{{ deploy_readiness.overall_status }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Checks</strong>
+            <div>{{ deploy_readiness.counts.pass }} pass, {{ deploy_readiness.counts.warn }} warn, {{ deploy_readiness.counts.fail }} fail</div>
+        </div>
+        <div class="note-block">
+            <strong>Environment</strong>
+            <div>{{ deploy_readiness.environment }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Production-safe?</strong>
+            <div>{{ "Yes, no hard blockers." if deploy_readiness.ready_for_production else "Not yet. There are still blocking checks." }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Setup Guide</strong>
+            <div><a class="text-link" href="{{ url_for('main.deploy_setup') }}">Open Render setup plan</a></div>
+        </div>
+        <div class="note-block">
+            <strong>Env Status</strong>
+            <div>
+                <a class="text-link" href="{{ url_for('main.deploy_env') }}">
+                    {{ deploy_env_status.counts.fail }} fail, {{ deploy_env_status.counts.warn }} warn
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Ownership Foundation</h2>
+        <a class="text-link" href="{{ url_for('workspaces.index') }}">Open workspaces</a>
+    </div>
+    <div class="split-grid">
+        <div class="note-block">
+            <strong>Default Workspace</strong>
+            <div>{{ default_workspace.name ~ " (" ~ default_workspace.slug ~ ")" if default_workspace else "No accessible workspace yet" }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Current Actor</strong>
+            <div>{{ default_owner.display_name }} ({{ default_owner.email }})</div>
+        </div>
+        <div class="note-block">
+            <strong>Why it matters</strong>
+            <div>Workspaces now have an owner layer, so future login, subscription, and team access can grow on top of a real boundary instead of a rewrite.</div>
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Email Delivery</h2>
+        <a class="text-link" href="{{ url_for('api.mail_status') }}">JSON status</a>
+    </div>
+    <div class="split-grid">
+        <div class="note-block">
+            <strong>Backend</strong>
+            <div>{{ mail_status.backend }}</div>
+        </div>
+        <div class="note-block">
+            <strong>From</strong>
+            <div>{{ mail_status.from_name }} &lt;{{ mail_status.from_address }}&gt;</div>
+        </div>
+        <div class="note-block">
+            <strong>Target</strong>
+            <div>{{ mail_status.delivery_target }}</div>
+        </div>
+        <div class="note-block">
+            <strong>Transport</strong>
+            <div>{{ mail_status.transport }}</div>
+        </div>
+        {% if mail_status.backend == "smtp" %}
+            <div class="note-block">
+                <strong>SMTP Auth</strong>
+                <div>{{ "Configured" if mail_status.smtp.authentication_configured else "Not configured" }}</div>
+            </div>
+            <div class="note-block">
+                <strong>SMTP Timeout</strong>
+                <div>{{ mail_status.smtp.timeout_seconds }}s</div>
+            </div>
+        {% else %}
+            <div class="note-block">
+                <strong>Recent messages</strong>
+                <div>{{ mail_status.recent_messages | length }}</div>
+            </div>
+            <div class="note-block">
+                <strong>Outbox path</strong>
+                <div>{{ mail_status.outbox_dir }}</div>
+            </div>
+        {% endif %}
+    </div>
+    <p class="helper-text">{{ mail_status.delivery_hint }}</p>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Latest Ready-To-Chat Handoffs</h2>
+        <a class="text-link" href="{{ url_for('api.latest_handoffs', _external=True) }}">JSON index</a>
+    </div>
+    {% if recent_handoffs %}
+        <div class="item-list">
+            {% for item in recent_handoffs %}
+                <div class="item-card">
+                    <strong><a href="{{ url_for('projects.detail', slug=item.project_slug) }}">{{ item.project_name }}</a></strong>
+                    <span>{{ item.project_slug }} | {{ item.project_status }}</span>
+                    <span>{{ item.handoff_updated_at }}</span>
+                    <span>{{ item.preview }}</span>
+                    <span class="api-link">{{ url_for('api.ready_for_next_chat_text', slug=item.project_slug, _external=True) }}</span>
+                    <span><a class="text-link" href="{{ url_for('projects.handoff_page', slug=item.project_slug) }}">Open handoff page</a></span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No handoffs yet</h3>
+            <p>Import a package or session log and Knowledge Hub will generate a ready-to-chat handoff automatically.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Recent Automation Activity</h2>
+        <a class="text-link" href="{{ url_for('api.latest_automation_events', _external=True) }}">JSON feed</a>
+    </div>
+    {% if recent_automation_events %}
+        <div class="item-list">
+            {% for item in recent_automation_events %}
+                <div class="item-card">
+                    <strong>{{ item.event_type }}</strong>
+                    <span>{{ item.created_at }} | {{ item.source }} | {{ item.status }}</span>
+                    <span>{{ item.project_slug or "global" }}</span>
+                    <span>{{ item.message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No automation events yet</h3>
+            <p>Imports, rebuilds, and cleanup actions will start appearing here automatically.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Inbox Status</h2>
+            <span class="pill">{{ inbox_status.pending_count }} pending</span>
+        </div>
+        <div class="meta-stack">
+            <div><strong>Pending:</strong> {{ inbox_status.pending_dir }}</div>
+            <div><strong>Processed:</strong> {{ inbox_status.processed_dir }}</div>
+            <div><strong>Failed:</strong> {{ inbox_status.failed_dir }}</div>
+            <div><strong>Processed files:</strong> {{ inbox_status.processed_count }}</div>
+            <div><strong>Failed files:</strong> {{ inbox_status.failed_count }}</div>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Inbox Watcher</h2>
+            <span class="pill">{{ inbox_watcher_status.state }}</span>
+        </div>
+        <div class="meta-stack">
+            <div><strong>Status file:</strong> {{ inbox_watcher_status.status_path }}</div>
+            <div><strong>PID:</strong> {{ inbox_watcher_status.pid or "Not running" }}</div>
+            <div><strong>Interval:</strong> {{ inbox_watcher_status.interval_seconds or "-" }}</div>
+            <div><strong>Started:</strong> {{ inbox_watcher_status.started_at or "Not started yet" }}</div>
+            <div><strong>Last heartbeat:</strong> {{ inbox_watcher_status.last_heartbeat_at or "No heartbeat yet" }}</div>
+            <div><strong>Heartbeat age:</strong> {{ inbox_watcher_status.heartbeat_age_seconds if inbox_watcher_status.heartbeat_age_seconds is not none else "-" }}</div>
+            <div><strong>Stop reason:</strong> {{ inbox_watcher_status.stop_reason or "-" }}</div>
+            <div><strong>Status API:</strong> <a class="text-link" href="{{ url_for('api.inbox_watcher_status') }}">/api/inbox/watcher-status</a></div>
+        </div>
+        <p class="helper-text">
+            Run the watcher once in the background and it will keep polling the inbox automatically. If the heartbeat gets old, the state will switch to <code>stale</code>.
+        </p>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Inbox Automation</h2>
+        </div>
+        <div class="code-list">
+            <code>python tools/process_inbox.py</code>
+            <code>python tools/process_inbox.py --watch --interval 5</code>
+            <code>python tools/process_inbox.py --status</code>
+            <code>python tools/inbox_watcher_status.py</code>
+            <code>.\tools\start_inbox_watcher.ps1 -Interval 5</code>
+            <code>.\tools\stop_inbox_watcher.ps1</code>
+            <code>.\tools\install_inbox_watcher_task.ps1 -Trigger OnLogon -Interval 5</code>
+            <code>.\tools\inbox_watcher_task_status.ps1</code>
+            <code>.\tools\remove_inbox_watcher_task.ps1</code>
+            <code>python tools/rebuild_exports.py --all</code>
+            <code>POST /api/inbox/process</code>
+            <code>GET /api/inbox/status</code>
+            <code>GET /api/inbox/watcher-status</code>
+        </div>
+    </article>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Latest Backup</h2>
+            <span class="pill">{{ recent_backups | length }} archives</span>
+        </div>
+        {% if latest_backup %}
+            <div class="meta-stack">
+                <div><strong>Filename:</strong> {{ latest_backup.filename }}</div>
+                <div><strong>Created:</strong> {{ latest_backup.created_at }}</div>
+                <div><strong>Size bytes:</strong> {{ latest_backup.size_bytes }}</div>
+                <div><strong>Path:</strong> {{ latest_backup.path }}</div>
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No backup archives yet.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Windows Automation Tasks</h2>
+            <a class="text-link" href="{{ url_for('api.scheduler_tasks') }}">JSON feed</a>
+        </div>
+        {% if scheduler_tasks %}
+            <div class="item-list">
+                {% for task in scheduler_tasks %}
+                    <div class="item-card">
+                        <strong>{{ task.display_name }}</strong>
+                        <span>{{ task.task_name }}</span>
+                        <span>
+                            {% if task.available %}
+                                {% if task.registered %}
+                                    {{ task.status or "registered" }}
+                                {% else %}
+                                    not registered
+                                {% endif %}
+                            {% else %}
+                                unavailable
+                            {% endif %}
+                        </span>
+                        <span>{{ task.next_run_time or task.error or "No next run time available." }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No scheduler information available.</p>
+            </div>
+        {% endif %}
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Safe Ops</h2>
+        <span class="pill">UI-triggered automation</span>
+    </div>
+    <div class="ops-grid">
+        <article class="ops-card">
+            <h3>Process Inbox Now</h3>
+            <p>Scan the pending inbox folder, import valid JSON payloads, and move files into processed or failed automatically.</p>
+            <form method="post" action="{{ url_for('main.process_inbox_now') }}" class="button-stack">
+                <button class="button button-primary" type="submit">Process Inbox</button>
+            </form>
+        </article>
+
+        <article class="ops-card">
+            <h3>Rebuild All Exports</h3>
+            <p>Refresh `chat_bootstrap`, `assistant_ready`, and `context_pack` files for every project in the hub.</p>
+            <form method="post" action="{{ url_for('main.rebuild_exports_all') }}" class="button-stack">
+                <button class="button button-secondary" type="submit">Rebuild All Exports</button>
+            </form>
+        </article>
+
+        <article class="ops-card">
+            <h3>Create Backup Archive</h3>
+            <p>Build a timestamped zip archive with the SQLite database, export bundles, and runtime state files.</p>
+            <form method="post" action="{{ url_for('main.create_backup_now') }}" class="button-stack">
+                <button class="button button-secondary" type="submit">Create Backup</button>
+            </form>
+        </article>
+
+        <article class="ops-card">
+            <h3>Automation Feeds</h3>
+            <p>Open the latest automation activity and handoff indexes without leaving the browser.</p>
+            <div class="button-stack">
+                <a class="button button-secondary" href="{{ url_for('api.latest_automation_events') }}">Automation Events JSON</a>
+                <a class="button button-secondary" href="{{ url_for('api.latest_handoffs') }}">Latest Handoffs JSON</a>
+                <a class="button button-secondary" href="{{ url_for('api.backups_latest') }}">Latest Backups JSON</a>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Automation-First Flow</h2>
+    </div>
+    <div class="step-grid">
+        <div class="step-card">
+            <span class="step-number">1</span>
+            <strong>Send JSON</strong>
+            <p>Paste or POST a structured session log. The importer can auto-create the project from its slug.</p>
+        </div>
+        <div class="step-card">
+            <span class="step-number">2</span>
+            <strong>Store the truth</strong>
+            <p>Knowledge Hub saves the normalized log, raw JSON, derived blockers, next steps, and project timeline.</p>
+        </div>
+        <div class="step-card">
+            <span class="step-number">3</span>
+            <strong>Generate context packs</strong>
+            <p>Use the API or CLI to build a ready context pack for the next chat without repeating yourself.</p>
+        </div>
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>API Endpoints</h2>
+        </div>
+        <div class="code-list">
+            <code>POST /api/session-logs/import</code>
+            <code>POST /api/prompt-templates/import</code>
+            <code>POST /api/snapshots/import</code>
+            <code>POST /api/project-packages/import</code>
+            <code>GET /api/workspaces</code>
+            <code>GET /api/workspaces/&lt;slug&gt;</code>
+            <code>GET /api/workspaces/&lt;slug&gt;/members</code>
+            <code>POST /api/workspaces/&lt;slug&gt;/members</code>
+            <code>GET /api/actor</code>
+            <code>GET /api/mail/status</code>
+            <code>GET /api/deploy/readiness</code>
+            <code>GET /api/deploy/env-status</code>
+            <code>GET /api/deploy/setup</code>
+            <code>POST /api/backups/create</code>
+            <code>GET /api/projects/&lt;slug&gt;/context-pack</code>
+            <code>GET /api/projects/&lt;slug&gt;/context-pack.txt</code>
+            <code>GET /api/projects/&lt;slug&gt;/chat-bootstrap</code>
+            <code>GET /api/projects/&lt;slug&gt;/chat-bootstrap.txt</code>
+            <code>GET /api/projects/&lt;slug&gt;/ready-for-next-chat</code>
+            <code>GET /api/projects/&lt;slug&gt;/ready-for-next-chat.txt</code>
+            <code>GET /api/projects/&lt;slug&gt;/assistant-ready</code>
+            <code>GET /api/projects/&lt;slug&gt;/assistant-ready.txt</code>
+            <code>GET /api/handoffs/latest</code>
+            <code>GET /api/automation-events/latest</code>
+            <code>GET /api/projects/&lt;slug&gt;/automation-events</code>
+            <code>GET /api/inbox/watcher-status</code>
+            <code>GET /api/scheduler/tasks</code>
+            <code>GET /api/backups/latest</code>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>CLI Shortcuts</h2>
+        </div>
+        <div class="code-list">
+            <code>python tools/import_session_log.py session.json</code>
+            <code>python tools/import_project_package.py --sample</code>
+            <code>python tools/import_project_package.py --sample --workspace-slug personal</code>
+            <code>python tools/process_inbox.py --watch</code>
+            <code>python tools/inbox_watcher_status.py</code>
+            <code>.\tools\start_inbox_watcher.ps1 -Interval 5</code>
+            <code>.\tools\install_inbox_watcher_task.ps1 -Preview</code>
+            <code>.\tools\inbox_watcher_task_status.ps1</code>
+            <code>.\tools\stop_inbox_watcher.ps1</code>
+            <code>python tools/create_backup_archive.py</code>
+            <code>.\tools\create_backup_archive.ps1</code>
+            <code>.\tools\install_daily_backup_task.ps1 -Preview</code>
+            <code>.\tools\daily_backup_task_status.ps1</code>
+            <code>python tools/rebuild_exports.py project-slug</code>
+            <code>python tools/deploy_readiness.py</code>
+            <code>python tools/deploy_env_status.py</code>
+            <code>python tools/deploy_setup.py</code>
+            <code>python tools/send_test_email.py you@example.com</code>
+            <code>python tools/ready_for_next_chat.py project-slug</code>
+            <code>python tools/latest_handoffs.py</code>
+            <code>python tools/latest_automation_events.py</code>
+            <code>python tools/dedupe_session_logs.py project-slug</code>
+            <code>python tools/chat_bootstrap.py project-slug</code>
+            <code>python tools/context_pack.py project-slug</code>
+            <code>python tools/assistant_ready.py project-slug</code>
+        </div>
+    </article>
+</section>
+{% endblock %}

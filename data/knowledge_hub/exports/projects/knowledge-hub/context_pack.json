@@ -1,0 +1,355 @@
+{
+  "generated_at": "2026-04-23T21:26:37.304081+00:00",
+  "project": {
+    "id": 5,
+    "slug": "knowledge-hub",
+    "name": "Knowledge Hub",
+    "description": "Internal memory and handoff service for AI-assisted work sessions.",
+    "stack": "Flask, SQLAlchemy, SQLite, Render",
+    "status": "active",
+    "current_goal": "Move from internal alpha toward calmer production deploy readiness with strong automation.",
+    "rules": "Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.",
+    "created_at": "2026-04-23T18:06:45",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "latest_snapshot": {
+    "id": 5,
+    "title": "Current internal state",
+    "content": "Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.",
+    "created_at": "2026-04-23T18:06:45",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "recent_snapshots": [
+    {
+      "id": 5,
+      "title": "Current internal state",
+      "content": "Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.",
+      "created_at": "2026-04-23T18:06:45",
+      "updated_at": "2026-04-23T18:06:45"
+    }
+  ],
+  "recent_logs": [
+    {
+      "id": 18,
+      "source": "codex",
+      "task": "Add a production env status page for Render-facing configuration",
+      "summary": "Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.",
+      "actions_taken": [
+        "Added deploy env status service with phase-one and phase-two grouping",
+        "Added deploy env page, API endpoint, and CLI wrappers",
+        "Linked env status into the home, readiness, and setup flow"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/deploy_env_status.py",
+        "src/knowledge_hub/templates/deploy_env_status.html",
+        "src/knowledge_hub/blueprints/main.py",
+        "tools/deploy_env_status.py"
+      ],
+      "blockers": [
+        "Real Render values are still missing for public base URL, SMTP host, owner email, and secret key",
+        "Production SMTP is still not verified end-to-end against the live service"
+      ],
+      "next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+      "tags": [
+        "deploy",
+        "env",
+        "render",
+        "smtp",
+        "production"
+      ],
+      "created_at": "2026-04-23T21:26:33"
+    },
+    {
+      "id": 17,
+      "source": "codex",
+      "task": "Add public-base-url handling and a Render deploy setup guide",
+      "summary": "Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.",
+      "actions_taken": [
+        "Added KH_PUBLIC_BASE_URL support to external magic-link URLs",
+        "Added deploy setup page, API, and CLI with phased Render env blocks",
+        "Extended readiness to fail production when public base URL is missing or local"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/public_urls.py",
+        "src/knowledge_hub/services/deploy_setup.py",
+        "src/knowledge_hub/services/deploy_readiness.py",
+        "tools/deploy_setup.py"
+      ],
+      "blockers": [
+        "Real Render env values still need to be set for public base URL, SMTP, owner email, and secret key",
+        "There is still no verified production SMTP provider configured against the live service"
+      ],
+      "next_step": "Add one production env status page that makes the remaining real Render values impossible to miss before the first live deploy.",
+      "tags": [
+        "render",
+        "deploy",
+        "public-base-url",
+        "smtp",
+        "production"
+      ],
+      "created_at": "2026-04-23T20:19:05"
+    },
+    {
+      "id": 16,
+      "source": "codex",
+      "task": "Add auth-required private mode on top of magic-link login",
+      "summary": "Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.",
+      "actions_taken": [
+        "Added KH_AUTH_REQUIRED enforcement for private HTML and API routes",
+        "Added login redirects with next return path preservation",
+        "Extended deploy readiness to catch auth-plus-file-mail lockout risk"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/access.py",
+        "src/knowledge_hub/app.py",
+        "src/knowledge_hub/blueprints/auth.py",
+        "src/knowledge_hub/services/deploy_readiness.py"
+      ],
+      "blockers": [
+        "Render production still needs real SMTP before KH_AUTH_REQUIRED can be enabled safely",
+        "Owner email and secret key are still placeholder values in the current local baseline"
+      ],
+      "next_step": "Prepare the first provider-ready Render email setup path and tighten the deploy checklist around real production env values.",
+      "tags": [
+        "auth",
+        "private-mode",
+        "magic-link",
+        "render",
+        "production"
+      ],
+      "created_at": "2026-04-23T20:10:21"
+    },
+    {
+      "id": 15,
+      "source": "codex",
+      "task": "Add the first real SMTP delivery path for magic-link login",
+      "summary": "Knowledge Hub now supports SMTP delivery, SMTP readiness checks, and a safe test-email CLI without removing the file outbox fallback.",
+      "actions_taken": [
+        "Added SMTP backend support to the mail service layer",
+        "Added SMTP config checks to deploy readiness",
+        "Added send_test_email CLI for calm delivery verification"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/mail.py",
+        "src/knowledge_hub/services/deploy_readiness.py",
+        "src/knowledge_hub/blueprints/auth.py",
+        "tools/send_test_email.py"
+      ],
+      "blockers": [
+        "A real SMTP provider is still not configured in production env vars",
+        "Render still uses placeholder mail sender and owner settings"
+      ],
+      "next_step": "Configure a real SMTP provider on Render and verify one real magic-link delivery end-to-end.",
+      "tags": [
+        "smtp",
+        "mail",
+        "auth",
+        "render",
+        "production"
+      ],
+      "created_at": "2026-04-23T20:06:23"
+    },
+    {
+      "id": 14,
+      "source": "codex",
+      "task": "Add file-outbox email delivery for magic-link login",
+      "summary": "Added a mail service with file outbox delivery, mail status API, and login flow that now delivers links through the configured backend instead of showing the raw link directly.",
+      "actions_taken": [
+        "Added file outbox mail backend",
+        "Connected magic-link login to mail delivery",
+        "Surfaced mail status in API, home UI, and deploy readiness"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/mail.py",
+        "src/knowledge_hub/blueprints/auth.py",
+        "src/knowledge_hub/blueprints/api.py",
+        "src/knowledge_hub/config.py"
+      ],
+      "blockers": [
+        "Mail sender address still uses a local placeholder domain",
+        "There is still no real external email provider yet",
+        "Production config still uses placeholder owner email and local dev secret"
+      ],
+      "next_step": "Move from file outbox delivery to the first calmer external email integration path.",
+      "tags": [
+        "auth",
+        "email",
+        "magic-link",
+        "outbox",
+        "dogfood"
+      ],
+      "created_at": "2026-04-23T19:23:40"
+    },
+    {
+      "id": 13,
+      "source": "codex",
+      "task": "Add the first real magic-link login slice",
+      "summary": "Added one-time login tokens, session-based actor resolution, sign-in/sign-out routes, and a UI login page.",
+      "actions_taken": [
+        "Added login token model and auth service",
+        "Added magic-link login page and session sign-in",
+        "Integrated session actor into request access resolution"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/auth.py",
+        "src/knowledge_hub/blueprints/auth.py",
+        "src/knowledge_hub/app.py",
+        "src/knowledge_hub/models.py"
+      ],
+      "blockers": [
+        "Magic link is shown in the UI directly and is not sent by email yet",
+        "Production config still uses placeholder owner email and local dev secret"
+      ],
+      "next_step": "Move from local magic-link login to the first calmer email-delivery or external auth integration path.",
+      "tags": [
+        "auth",
+        "login",
+        "magic-link",
+        "session",
+        "dogfood"
+      ],
+      "created_at": "2026-04-23T19:09:29"
+    },
+    {
+      "id": 12,
+      "source": "codex",
+      "task": "Add the first auth-ready workspace access slice",
+      "summary": "Added current actor resolution, dev actor override, membership-scoped workspace/project access, and owner/admin member management.",
+      "actions_taken": [
+        "Resolved a current actor for every request",
+        "Scoped workspace and project views by membership",
+        "Added member management from workspace detail and API"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/access.py",
+        "src/knowledge_hub/blueprints/workspaces.py",
+        "src/knowledge_hub/blueprints/api.py",
+        "src/knowledge_hub/app.py"
+      ],
+      "blockers": [
+        "Still no real authentication or login flow",
+        "Production config still uses placeholder owner email and local dev secret"
+      ],
+      "next_step": "Move from auth-ready access control into the first real login/authentication slice.",
+      "tags": [
+        "auth",
+        "workspace",
+        "access-control",
+        "saas-foundation",
+        "dogfood"
+      ],
+      "created_at": "2026-04-23T19:06:33"
+    },
+    {
+      "id": 11,
+      "source": "codex",
+      "task": "Add deploy-readiness checklist for calmer production rollout",
+      "summary": "Added deploy-readiness checks with pass/warn/fail status across config, storage, secrets, Render baseline, and owner bootstrap.",
+      "actions_taken": [
+        "Added deploy readiness service",
+        "Added deploy readiness page, API, and CLI",
+        "Surfaced readiness summary on the home page"
+      ],
+      "files_touched": [
+        "src/knowledge_hub/services/deploy_readiness.py",
+        "src/knowledge_hub/blueprints/main.py",
+        "src/knowledge_hub/blueprints/api.py",
+        "tools/deploy_readiness.py"
+      ],
+      "blockers": [
+        "Secret key is still default in local development",
+        "Default owner email still uses placeholder local value"
+      ],
+      "next_step": "Move from deploy-readiness visibility into the first real auth slice for workspace access.",
+      "tags": [
+        "production",
+        "render",
+        "readiness",
+        "dogfood"
+      ],
+      "created_at": "2026-04-23T18:55:25"
+    }
+  ],
+  "prompt_templates": [
+    {
+      "id": 5,
+      "type": "new_chat",
+      "title": "Continue Knowledge Hub work",
+      "content": "Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.",
+      "created_at": "2026-04-23T18:06:45",
+      "updated_at": "2026-04-23T18:06:45"
+    }
+  ],
+  "derived": {
+    "active_blockers": [
+      "Real Render values are still missing for public base URL, SMTP host, owner email, and secret key",
+      "Production SMTP is still not verified end-to-end against the live service",
+      "Real Render env values still need to be set for public base URL, SMTP, owner email, and secret key",
+      "There is still no verified production SMTP provider configured against the live service",
+      "Render production still needs real SMTP before KH_AUTH_REQUIRED can be enabled safely",
+      "Owner email and secret key are still placeholder values in the current local baseline",
+      "A real SMTP provider is still not configured in production env vars",
+      "Render still uses placeholder mail sender and owner settings",
+      "Mail sender address still uses a local placeholder domain",
+      "There is still no real external email provider yet",
+      "Production config still uses placeholder owner email and local dev secret",
+      "Magic link is shown in the UI directly and is not sent by email yet",
+      "Still no real authentication or login flow",
+      "Secret key is still default in local development",
+      "Default owner email still uses placeholder local value"
+    ],
+    "recent_tags": [
+      "deploy",
+      "env",
+      "render",
+      "smtp",
+      "production",
+      "public-base-url",
+      "auth",
+      "private-mode",
+      "magic-link",
+      "mail",
+      "email",
+      "outbox",
+      "dogfood",
+      "login",
+      "session",
+      "workspace",
+      "access-control",
+      "saas-foundation",
+      "readiness"
+    ],
+    "files_touched": [
+      "src/knowledge_hub/services/deploy_env_status.py",
+      "src/knowledge_hub/templates/deploy_env_status.html",
+      "src/knowledge_hub/blueprints/main.py",
+      "tools/deploy_env_status.py",
+      "src/knowledge_hub/services/public_urls.py",
+      "src/knowledge_hub/services/deploy_setup.py",
+      "src/knowledge_hub/services/deploy_readiness.py",
+      "tools/deploy_setup.py",
+      "src/knowledge_hub/services/access.py",
+      "src/knowledge_hub/app.py",
+      "src/knowledge_hub/blueprints/auth.py",
+      "src/knowledge_hub/services/mail.py",
+      "tools/send_test_email.py",
+      "src/knowledge_hub/blueprints/api.py",
+      "src/knowledge_hub/config.py",
+      "src/knowledge_hub/services/auth.py",
+      "src/knowledge_hub/models.py",
+      "src/knowledge_hub/blueprints/workspaces.py",
+      "tools/deploy_readiness.py"
+    ],
+    "next_steps": [
+      "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+      "Add one production env status page that makes the remaining real Render values impossible to miss before the first live deploy.",
+      "Prepare the first provider-ready Render email setup path and tighten the deploy checklist around real production env values.",
+      "Configure a real SMTP provider on Render and verify one real magic-link delivery end-to-end.",
+      "Move from file outbox delivery to the first calmer external email integration path.",
+      "Move from local magic-link login to the first calmer email-delivery or external auth integration path.",
+      "Move from auth-ready access control into the first real login/authentication slice.",
+      "Move from deploy-readiness visibility into the first real auth slice for workspace access."
+    ],
+    "recommended_next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment."
+  }
+}

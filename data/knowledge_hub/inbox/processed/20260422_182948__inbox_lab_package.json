@@ -1,0 +1,30 @@
+﻿{
+  "project": {
+    "slug": "inbox-lab",
+    "name": "Inbox Lab",
+    "description": "Project created from inbox processing.",
+    "current_goal": "Validate inbox automation"
+  },
+  "session_logs": [
+    {
+      "source": "codex",
+      "task": "Process an inbox package",
+      "summary": "A pending JSON file should be imported and moved automatically.",
+      "next_step": "Check the processed folder and context pack",
+      "tags": ["inbox", "automation"]
+    }
+  ],
+  "prompt_templates": [
+    {
+      "type": "new_chat",
+      "title": "Inbox-driven chat start",
+      "content": "Read the latest context pack and focus on the current goal."
+    }
+  ],
+  "snapshots": [
+    {
+      "title": "Current state",
+      "content": "Inbox processing now imports a full project package from the pending folder."
+    }
+  ]
+}

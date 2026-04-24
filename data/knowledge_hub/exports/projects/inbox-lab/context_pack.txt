@@ -1,0 +1,39 @@
+Knowledge Hub Context Pack
+Generated at: 2026-04-23T21:26:19.681327+00:00
+
+Project
+- Name: Inbox Lab
+- Slug: inbox-lab
+- Status: active
+- Stack: Not set
+- Current goal: Validate inbox automation
+- Description: Project created from inbox processing.
+
+Project Rules
+No rules captured yet.
+
+Recommended Next Step
+Check the processed folder and context pack
+
+Active Blockers
+- None recorded.
+
+Recent Tags
+- inbox
+- automation
+
+Files Touched Recently
+- None recorded.
+
+Latest Snapshot
+- Title: Current state
+Inbox processing now imports a full project package from the pending folder.
+
+Recent Session Logs
+- 2026-04-22T18:29:48 | codex | Process an inbox package
+  Summary: A pending JSON file should be imported and moved automatically.
+  Next step: Check the processed folder and context pack
+
+Reusable Prompt Templates
+- Inbox-driven chat start [new_chat]
+Read the latest context pack and focus on the current goal.

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Production Path</p>
+        <h1>Deploy Readiness</h1>
+        <p class="lead">A simple pass, warn, fail checklist for a calmer Render or production deploy. This is not a promise that everything is perfect. It is a visible baseline for what still needs attention.</p>
+    </div>
+    <div class="header-actions">
+        <span class="pill pill-{{ readiness.overall_status }}">{{ readiness.overall_status }}</span>
+        <a class="button button-secondary" href="{{ url_for('api.deploy_readiness') }}">Open JSON</a>
+        <a class="button button-secondary" href="{{ url_for('main.deploy_env') }}">Open Env Status</a>
+        <a class="button button-secondary" href="{{ url_for('main.deploy_setup') }}">Open Setup Guide</a>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span class="stat-label">Pass</span>
+        <strong class="stat-value">{{ readiness.counts.pass }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Warn</span>
+        <strong class="stat-value">{{ readiness.counts.warn }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Fail</span>
+        <strong class="stat-value">{{ readiness.counts.fail }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Environment</span>
+        <strong class="stat-value">{{ readiness.environment }}</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Checklist</h2>
+        <span class="pill">{{ readiness.checks | length }} checks</span>
+    </div>
+    <div class="item-list">
+        {% for item in readiness.checks %}
+            <div class="item-card">
+                <div class="panel-header">
+                    <strong>{{ item.label }}</strong>
+                    <span class="pill pill-{{ item.status }}">{{ item.status }}</span>
+                </div>
+                <span>{{ item.message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Next Actions</h2>
+    </div>
+    {% if readiness.recommended_actions %}
+        <div class="item-list">
+            {% for item in readiness.recommended_actions %}
+                <div class="item-card">{{ item }}</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state compact">
+            <p>No open readiness actions right now.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+Assistant-Ready Project Brief
+Generated at: 2026-04-23T21:26:19.708804+00:00
+
+Project
+- Name: Automation Lab
+- Slug: automation-lab
+- Status: active
+- Current goal: Not set
+- Description: Auto-created from session log import.
+- Stack: Not set
+
+Rules
+No rules captured yet.
+
+Immediate Focus
+- Recommended next step: Перезапустить сервер и проверить новые страницы
+- Active blockers: Need restart after code changes
+- Recent tags: automation, mvp, context-pack, api, test
+
+Latest Snapshot
+No snapshot stored yet.
+
+Recent Session Notes
+- Собрать automation-first память для AI сессий
+  Summary: Добавлены JSON import, API и context pack.
+  Next step: Перезапустить сервер и проверить новые страницы
+- Проверить API import
+  Summary: API import работает через Flask test client.
+  Next step: Перезапустить локальный сервер
+
+Suggested Chat Instruction
+Start by reading the project brief, reflect the current goal, and propose the next practical step.

@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-04-23T21:26:37.299120+00:00",
+  "project": {
+    "slug": "knowledge-hub",
+    "name": "Knowledge Hub",
+    "status": "active",
+    "description": "Internal memory and handoff service for AI-assisted work sessions.",
+    "stack": "Flask, SQLAlchemy, SQLite, Render",
+    "current_goal": "Move from internal alpha toward calmer production deploy readiness with strong automation.",
+    "rules": "Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "focus": {
+    "current_goal": "Move from internal alpha toward calmer production deploy readiness with strong automation.",
+    "recommended_next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+    "active_blockers": [
+      "Real Render values are still missing for public base URL, SMTP host, owner email, and secret key",
+      "Production SMTP is still not verified end-to-end against the live service"
+    ],
+    "recent_tags": [
+      "deploy",
+      "env",
+      "render",
+      "smtp",
+      "production"
+    ],
+    "key_files": [
+      "src/knowledge_hub/services/deploy_env_status.py",
+      "src/knowledge_hub/templates/deploy_env_status.html",
+      "src/knowledge_hub/blueprints/main.py",
+      "tools/deploy_env_status.py"
+    ]
+  },
+  "latest_snapshot": {
+    "id": 5,
+    "title": "Current internal state",
+    "content": "Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "recent_decisions": [
+    {
+      "id": 18,
+      "task": "Add a production env status page for Render-facing configuration",
+      "summary": "Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.",
+      "next_step": "Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.",
+      "created_at": "2026-04-23T21:26:33"
+    },
+    {
+      "id": 17,
+      "task": "Add public-base-url handling and a Render deploy setup guide",
+      "summary": "Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.",
+      "next_step": "Add one production env status page that makes the remaining real Render values impossible to miss before the first live deploy.",
+      "created_at": "2026-04-23T20:19:05"
+    },
+    {
+      "id": 16,
+      "task": "Add auth-required private mode on top of magic-link login",
+      "summary": "Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.",
+      "next_step": "Prepare the first provider-ready Render email setup path and tighten the deploy checklist around real production env values.",
+      "created_at": "2026-04-23T20:10:21"
+    }
+  ],
+  "starter_template": {
+    "id": 5,
+    "type": "new_chat",
+    "title": "Continue Knowledge Hub work",
+    "content": "Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.",
+    "updated_at": "2026-04-23T18:06:45"
+  },
+  "bootstrap_text": "You are joining ongoing work on the project 'Knowledge Hub' (knowledge-hub).\nCurrent goal: Move from internal alpha toward calmer production deploy readiness with strong automation.\nRecommended next step: Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.\nActive blockers: Real Render values are still missing for public base URL, SMTP host, owner email, and secret key, Production SMTP is still not verified end-to-end against the live service.\nProject rules: Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.\nLatest snapshot: Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.\nRecent decisions:\n- Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.\n- Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.\n- Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.\nKey files touched recently: src/knowledge_hub/services/deploy_env_status.py, src/knowledge_hub/templates/deploy_env_status.html, src/knowledge_hub/blueprints/main.py, tools/deploy_env_status.py.\nPreferred chat instruction: Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.\nDo not ask to restate the basic context. Continue from this state and move the work forward."
+}

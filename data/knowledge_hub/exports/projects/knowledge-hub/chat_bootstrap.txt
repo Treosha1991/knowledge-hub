@@ -1,0 +1,13 @@
+You are joining ongoing work on the project 'Knowledge Hub' (knowledge-hub).
+Current goal: Move from internal alpha toward calmer production deploy readiness with strong automation.
+Recommended next step: Use the new env status page to drive one real Render env setup pass and then verify SMTP delivery against the live deployment.
+Active blockers: Real Render values are still missing for public base URL, SMTP host, owner email, and secret key, Production SMTP is still not verified end-to-end against the live service.
+Project rules: Prefer automation over manual entry. Keep the system simple, reliable, and ready for future multi-user growth.
+Latest snapshot: Knowledge Hub now has project packages, automation events, inbox watcher status, backup archives, and copy-friendly handoff pages.
+Recent decisions:
+- Knowledge Hub now shows a dedicated deploy env status page, API, and CLI so missing, default, or blocking production env variables are obvious before the first live deploy.
+- Knowledge Hub now supports KH_PUBLIC_BASE_URL for stable magic-link URLs and ships a copy-friendly deploy setup guide with phased Render env values for SMTP first and auth-required second.
+- Knowledge Hub can now require sign-in for private pages and APIs, preserve next targets after magic-link login, and warn if production auth is enabled without real mail delivery.
+Key files touched recently: src/knowledge_hub/services/deploy_env_status.py, src/knowledge_hub/templates/deploy_env_status.html, src/knowledge_hub/blueprints/main.py, tools/deploy_env_status.py.
+Preferred chat instruction: Read the ready-for-next-chat handoff first, do not ask to restate context, and focus on the next production-safe improvement.
+Do not ask to restate the basic context. Continue from this state and move the work forward.

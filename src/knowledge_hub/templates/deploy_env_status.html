@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Production Path</p>
+        <h1>Deploy Env Status</h1>
+        <p class="lead">A direct view of the real Render-facing env variables: what is set, what is still default, and what still blocks a calm production rollout.</p>
+    </div>
+    <div class="header-actions">
+        <a class="button button-secondary" href="{{ url_for('api.deploy_env_status') }}">Open JSON</a>
+        <a class="button button-secondary" href="{{ url_for('main.deploy_setup') }}">Open Setup Guide</a>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span class="stat-label">Pass</span>
+        <strong class="stat-value">{{ env_status.counts.pass }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Warn</span>
+        <strong class="stat-value">{{ env_status.counts.warn }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Fail</span>
+        <strong class="stat-value">{{ env_status.counts.fail }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Phase 1 Ready</span>
+        <strong class="stat-value">{{ "yes" if env_status.ready_for_phase_one else "not yet" }}</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Blocking Now</h2>
+        <span class="pill">{{ env_status.blocking_items | length }}</span>
+    </div>
+    {% if env_status.blocking_items %}
+        <div class="item-list">
+            {% for item in env_status.blocking_items %}
+                <div class="item-card">
+                    <div class="panel-header">
+                        <strong>{{ item.key }}</strong>
+                        <span class="pill pill-{{ item.status }}">{{ item.status }}</span>
+                    </div>
+                    <span>Current: {{ item.display_value }}</span>
+                    <span>Desired: {{ item.desired_value }}</span>
+                    <span>Source: {{ item.source }}</span>
+                    <span>{{ item.message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state compact">
+            <p>No hard blockers right now.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Phase 1</h2>
+            <span class="pill">SMTP and public URL</span>
+        </div>
+        <div class="item-list">
+            {% for item in env_status.phase_one %}
+                <div class="item-card">
+                    <div class="panel-header">
+                        <strong>{{ item.key }}</strong>
+                        <span class="pill pill-{{ item.status }}">{{ item.status }}</span>
+                    </div>
+                    <span>{{ item.label }}</span>
+                    <span>Current: {{ item.display_value }}</span>
+                    <span>Desired: {{ item.desired_value }}</span>
+                    <span>Source: {{ item.source }}</span>
+                    <span>{{ item.message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Phase 2</h2>
+            <span class="pill">Private mode</span>
+        </div>
+        <div class="item-list">
+            {% for item in env_status.phase_two %}
+                <div class="item-card">
+                    <div class="panel-header">
+                        <strong>{{ item.key }}</strong>
+                        <span class="pill pill-{{ item.status }}">{{ item.status }}</span>
+                    </div>
+                    <span>{{ item.label }}</span>
+                    <span>Current: {{ item.display_value }}</span>
+                    <span>Desired: {{ item.desired_value }}</span>
+                    <span>Source: {{ item.source }}</span>
+                    <span>{{ item.message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Next Actions</h2>
+    </div>
+    {% if env_status.next_actions %}
+        <div class="item-list">
+            {% for item in env_status.next_actions %}
+                <div class="item-card">{{ item }}</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state compact">
+            <p>No follow-up actions right now.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Session Logs</p>
+        <h1>{% if project %}Session logs for {{ project.name }}{% else %}All session logs{% endif %}</h1>
+        <p class="lead">Use JSON import or API-first automation. Manual fields are only a backup path.</p>
+    </div>
+    <a class="button button-primary" href="{{ url_for('session_logs.create', project=project_slug) }}">New Session Log</a>
+</section>
+
+<section class="panel">
+    {% if logs %}
+        <div class="item-list">
+            {% for log in logs %}
+                <div class="item-card">
+                    <strong>{{ log.task or "Untitled session" }}</strong>
+                    <span>{{ log.project.name }}</span>
+                    <span>{{ log.summary or "No summary yet." }}</span>
+                    {% if log.tags %}
+                        <div class="tag-list">
+                            {% for tag in log.tags %}
+                                <span class="tag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if log.next_step %}
+                        <span><strong>Next step:</strong> {{ log.next_step }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>No session logs saved yet</h2>
+            <p>Import one JSON log and this timeline becomes your cross-chat memory.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

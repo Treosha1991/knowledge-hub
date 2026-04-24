@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Projects</p>
+        <h1>Project registry</h1>
+        <p class="lead">
+            Each project becomes the anchor for logs, prompts, snapshots, blockers, and next steps.
+            {% if workspace %}
+                Current filter: {{ workspace.name }}.
+            {% endif %}
+        </p>
+    </div>
+    <a class="button button-primary" href="{{ url_for('projects.create') }}">New Project</a>
+</section>
+
+<section class="panel">
+    {% if projects %}
+        <div class="card-grid">
+            {% for project in projects %}
+                <a class="project-card" href="{{ url_for('projects.detail', slug=project.slug) }}">
+                    <div class="project-card-header">
+                        <h2>{{ project.name }}</h2>
+                        <span class="pill">{{ project.status }}</span>
+                    </div>
+                    <p class="muted">{{ project.slug }}</p>
+                    <p><strong>Workspace:</strong> {{ project.workspace.name if project.workspace else "Not set" }}</p>
+                    <p>{{ project.description or "No description yet." }}</p>
+                    <p><strong>Current goal:</strong> {{ project.current_goal or "Not set" }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>No projects saved yet</h2>
+            <p>Start with one project and use it as the home for your AI session history.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

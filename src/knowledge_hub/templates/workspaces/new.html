@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Workspaces</p>
+        <h1>Create Workspace</h1>
+        <p class="lead">Keep this simple. For now, a workspace is the clean ownership boundary for projects and future user access.</p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    {% if errors %}
+        <div class="validation-box">
+            {% for error in errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="form-grid">
+        <label>
+            <span>Name</span>
+            <input type="text" name="name" value="{{ form_data.name }}" required>
+        </label>
+        <label>
+            <span>Slug</span>
+            <input type="text" name="slug" value="{{ form_data.slug }}" placeholder="leave blank to auto-generate">
+        </label>
+        <label class="full-width">
+            <span>Description</span>
+            <textarea name="description" rows="4">{{ form_data.description }}</textarea>
+        </label>
+        <label>
+            <span>Plan</span>
+            <input type="text" name="plan" value="{{ form_data.plan or 'internal' }}">
+        </label>
+        <label>
+            <span>Status</span>
+            <input type="text" name="status" value="{{ form_data.status or 'active' }}">
+        </label>
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Save Workspace</button>
+            <a class="button button-secondary" href="{{ url_for('workspaces.index') }}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Workspace</p>
+        <h1>{{ workspace.name }}</h1>
+        <p class="lead">{{ workspace.description or "No workspace description yet." }}</p>
+    </div>
+    <div class="header-actions">
+        <span class="pill">{{ workspace.plan }}</span>
+        <span class="pill">{{ workspace.status }}</span>
+        <a class="button button-secondary" href="{{ url_for('projects.index', workspace=workspace.slug) }}">Open Projects</a>
+    </div>
+</section>
+
+<section class="info-grid">
+    <article class="panel">
+        <h2>Ownership</h2>
+        <div class="meta-stack">
+            <div><strong>Slug:</strong> {{ workspace.slug }}</div>
+            <div><strong>Members:</strong> {{ memberships | length }}</div>
+            <div><strong>Projects:</strong> {{ projects | length }}</div>
+            <div><strong>Owners:</strong> {{ owner_memberships | length }}</div>
+        </div>
+    </article>
+    <article class="panel">
+        <h2>API</h2>
+        <div class="meta-stack">
+            <div><strong>Workspace JSON:</strong> <span class="api-link">{{ url_for('api.workspace_detail', slug=workspace.slug, _external=True) }}</span></div>
+            <div><strong>Members JSON:</strong> <span class="api-link">{{ url_for('api.workspace_members', slug=workspace.slug, _external=True) }}</span></div>
+        </div>
+    </article>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Members</h2>
+            <span class="pill">{{ memberships | length }}</span>
+        </div>
+        {% if memberships %}
+            <div class="item-list">
+                {% for item in memberships %}
+                    <div class="item-card">
+                        <strong>{{ item.user.display_name }}</strong>
+                        <span>{{ item.user.email }}</span>
+                        <span>{{ item.role }} | {{ item.status }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No members yet.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Member Access</h2>
+            <span class="pill">{{ "owner/admin" if can_manage_members else "read only" }}</span>
+        </div>
+        {% if can_manage_members %}
+            {% if member_errors %}
+                <div class="validation-box">
+                    {% for error in member_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" action="{{ url_for('workspaces.add_member', slug=workspace.slug) }}" class="form-grid">
+                <label>
+                    <span>Email</span>
+                    <input type="email" name="email" value="{{ member_form_data.email }}" required>
+                </label>
+                <label>
+                    <span>Display Name</span>
+                    <input type="text" name="display_name" value="{{ member_form_data.display_name }}">
+                </label>
+                <label>
+                    <span>Role</span>
+                    <select name="role">
+                        {% for role in ["member", "admin", "owner"] %}
+                            <option value="{{ role }}" {% if member_form_data.role == role %}selected{% endif %}>{{ role }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <div class="note-block">
+                    Add or update a workspace member. In development you can later open the app with <code>?as_user=email@example.com</code> to test that member's view.
+                </div>
+                <div class="form-actions full-width">
+                    <button class="button button-primary" type="submit">Save Member Access</button>
+                </div>
+            </form>
+        {% else %}
+            <div class="empty-state compact">
+                <p>You can view this workspace, but only owners or admins can manage members.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Projects</h2>
+            <span class="pill">{{ projects | length }}</span>
+        </div>
+        {% if projects %}
+            <div class="item-list">
+                {% for project in projects %}
+                    <a class="item-card" href="{{ url_for('projects.detail', slug=project.slug) }}">
+                        <strong>{{ project.name }}</strong>
+                        <span>{{ project.slug }}</span>
+                        <span>{{ project.status }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact">
+                <p>No projects in this workspace yet.</p>
+            </div>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

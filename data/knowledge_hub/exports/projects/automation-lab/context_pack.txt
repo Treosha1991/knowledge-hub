@@ -1,0 +1,47 @@
+Knowledge Hub Context Pack
+Generated at: 2026-04-23T21:26:19.710317+00:00
+
+Project
+- Name: Automation Lab
+- Slug: automation-lab
+- Status: active
+- Stack: Not set
+- Current goal: Not set
+- Description: Auto-created from session log import.
+
+Project Rules
+No rules captured yet.
+
+Recommended Next Step
+Перезапустить сервер и проверить новые страницы
+
+Active Blockers
+- Need restart after code changes
+
+Recent Tags
+- automation
+- mvp
+- context-pack
+- api
+- test
+
+Files Touched Recently
+- src/knowledge_hub/services/session_import.py
+- tools/context_pack.py
+- src/knowledge_hub/blueprints/api.py
+
+Latest Snapshot
+No snapshot stored yet.
+
+Recent Session Logs
+- 2026-04-21T19:42:51 | codex | Собрать automation-first память для AI сессий
+  Summary: Добавлены JSON import, API и context pack.
+  Actions: Created automation service layer, Added CLI tools
+  Next step: Перезапустить сервер и проверить новые страницы
+- 2026-04-21T19:42:51 | chatgpt | Проверить API import
+  Summary: API import работает через Flask test client.
+  Actions: Ran automated test
+  Next step: Перезапустить локальный сервер
+
+Reusable Prompt Templates
+No prompt templates stored yet.

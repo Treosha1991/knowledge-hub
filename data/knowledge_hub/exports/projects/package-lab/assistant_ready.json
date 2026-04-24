@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-04-23T21:26:19.699371+00:00",
+  "project": {
+    "slug": "package-lab",
+    "name": "Package Lab",
+    "status": "active",
+    "description": "Project imported through a single package.",
+    "stack": null,
+    "current_goal": "Test unified package import",
+    "rules": "Prefer automation over manual entry.",
+    "updated_at": "2026-04-22T18:08:49"
+  },
+  "focus": {
+    "recommended_next_step": "Проверить context pack после package import",
+    "active_blockers": [],
+    "recent_tags": [
+      "package",
+      "automation"
+    ]
+  },
+  "latest_snapshot": {
+    "id": 1,
+    "title": "Текущее состояние",
+    "content": "Package import уже объединяет project, session logs, prompt templates и snapshots.",
+    "updated_at": "2026-04-22T18:08:49"
+  },
+  "recent_session_notes": [
+    {
+      "id": 3,
+      "task": "Проверить package import",
+      "summary": "Один JSON импортирует проект, логи, prompts и snapshots.",
+      "next_step": "Проверить context pack после package import",
+      "created_at": "2026-04-22T18:08:49"
+    }
+  ],
+  "selected_prompt_template": {
+    "id": 1,
+    "type": "new_chat",
+    "title": "Старт нового чата",
+    "content": "Сначала прочитай context pack и ответь коротко по текущему next step.",
+    "updated_at": "2026-04-22T18:08:49"
+  }
+}

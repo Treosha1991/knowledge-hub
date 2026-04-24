@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-04-23T21:26:19.688574+00:00",
+  "project": {
+    "slug": "sample-package-project",
+    "name": "Sample Package Project",
+    "status": "active",
+    "description": "Bundled sample package for Knowledge Hub import checks.",
+    "stack": null,
+    "current_goal": "Verify package import end-to-end",
+    "rules": "Prefer automation over manual entry.",
+    "updated_at": "2026-04-22T18:20:39"
+  },
+  "focus": {
+    "current_goal": "Verify package import end-to-end",
+    "recommended_next_step": "Open the context pack for sample-package-project",
+    "active_blockers": [],
+    "recent_tags": [
+      "sample",
+      "package-import"
+    ],
+    "key_files": [
+      "examples/project_package.sample.json"
+    ]
+  },
+  "latest_snapshot": {
+    "id": 3,
+    "title": "Current state",
+    "content": "Knowledge Hub already supports package import, context pack export, and JSON import for key entities.",
+    "updated_at": "2026-04-22T18:21:41"
+  },
+  "recent_decisions": [
+    {
+      "id": 5,
+      "task": "Check the project package import flow",
+      "summary": "One JSON file imports the project, session log, prompt template, and snapshot.",
+      "next_step": "Open the context pack for sample-package-project",
+      "created_at": "2026-04-22T18:21:41"
+    }
+  ],
+  "starter_template": {
+    "id": 3,
+    "type": "new_chat",
+    "title": "Start a new project chat",
+    "content": "Read the context pack, list blockers, and suggest the next practical step.",
+    "updated_at": "2026-04-22T18:21:41"
+  },
+  "bootstrap_text": "You are joining ongoing work on the project 'Sample Package Project' (sample-package-project).\nCurrent goal: Verify package import end-to-end\nRecommended next step: Open the context pack for sample-package-project\nActive blockers: none recorded.\nProject rules: Prefer automation over manual entry.\nLatest snapshot: Knowledge Hub already supports package import, context pack export, and JSON import for key entities.\nRecent decisions:\n- One JSON file imports the project, session log, prompt template, and snapshot.\nKey files touched recently: examples/project_package.sample.json.\nPreferred chat instruction: Read the context pack, list blockers, and suggest the next practical step.\nDo not ask to restate the basic context. Continue from this state and move the work forward."
+}

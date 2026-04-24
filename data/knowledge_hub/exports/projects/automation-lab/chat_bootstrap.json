@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-04-23T21:26:19.707000+00:00",
+  "project": {
+    "slug": "automation-lab",
+    "name": "Automation Lab",
+    "status": "active",
+    "description": "Auto-created from session log import.",
+    "stack": null,
+    "current_goal": null,
+    "rules": null,
+    "updated_at": "2026-04-21T19:42:51"
+  },
+  "focus": {
+    "current_goal": null,
+    "recommended_next_step": "Перезапустить сервер и проверить новые страницы",
+    "active_blockers": [
+      "Need restart after code changes"
+    ],
+    "recent_tags": [
+      "automation",
+      "mvp",
+      "context-pack",
+      "api",
+      "test"
+    ],
+    "key_files": [
+      "src/knowledge_hub/services/session_import.py",
+      "tools/context_pack.py",
+      "src/knowledge_hub/blueprints/api.py"
+    ]
+  },
+  "latest_snapshot": null,
+  "recent_decisions": [
+    {
+      "id": 1,
+      "task": "Собрать automation-first память для AI сессий",
+      "summary": "Добавлены JSON import, API и context pack.",
+      "next_step": "Перезапустить сервер и проверить новые страницы",
+      "created_at": "2026-04-21T19:42:51"
+    },
+    {
+      "id": 2,
+      "task": "Проверить API import",
+      "summary": "API import работает через Flask test client.",
+      "next_step": "Перезапустить локальный сервер",
+      "created_at": "2026-04-21T19:42:51"
+    }
+  ],
+  "starter_template": null,
+  "bootstrap_text": "You are joining ongoing work on the project 'Automation Lab' (automation-lab).\nCurrent goal: Not set.\nRecommended next step: Перезапустить сервер и проверить новые страницы\nActive blockers: Need restart after code changes.\nProject rules: no special rules captured yet.\nRecent decisions:\n- Добавлены JSON import, API и context pack.\n- API import работает через Flask test client.\nKey files touched recently: src/knowledge_hub/services/session_import.py, tools/context_pack.py, src/knowledge_hub/blueprints/api.py.\nPreferred chat instruction: Continue from this context and propose the next practical step.\nDo not ask to restate the basic context. Continue from this state and move the work forward."
+}

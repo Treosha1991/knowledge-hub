@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Session Logs</p>
+        <h1>Import Session Log</h1>
+        <p class="lead">The preferred path is raw JSON import. Manual fields are available only as a backup when you do not have a ready payload.</p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    <div class="info-banner">
+        Primary automation endpoint: <code>{{ import_api_url }}</code>
+    </div>
+    {% if errors %}
+        <div class="validation-box">
+            {% for error in errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <form method="post" class="form-grid">
+        <label>
+            <span>Fallback Workspace</span>
+            <select name="workspace_id">
+                {% for workspace in workspaces %}
+                    <option value="{{ workspace.id }}" {% if selected_workspace_id == workspace.id %}selected{% endif %}>
+                        {{ workspace.name }} ({{ workspace.slug }})
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            <span>Fallback Project</span>
+            <select name="project_id">
+                <option value="">Use project_slug from JSON</option>
+                {% for project in projects %}
+                    <option value="{{ project.id }}" {% if selected_project_id == project.id %}selected{% endif %}>
+                        {{ project.name }} ({{ project.slug }})
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            <span>Fallback Project Slug</span>
+            <input type="text" name="project_slug" value="{{ form_data.project_slug }}" placeholder="used when JSON has no project_slug">
+        </label>
+        <label class="full-width">
+            <span>Raw JSON</span>
+            <textarea name="raw_json" rows="16" placeholder='Paste one JSON object, an array of logs, or {"logs":[...]}'>{{ form_data.raw_json or sample_json }}</textarea>
+        </label>
+        <label class="checkbox-row full-width">
+            <input type="checkbox" name="auto_create_project" value="1" {% if form_data.auto_create_project == "1" %}checked{% endif %}>
+            <span>Auto-create project when JSON contains a new project_slug</span>
+        </label>
+        <div class="full-width section-divider">
+            <strong>Manual fallback</strong>
+            <p class="helper-text">If you leave Raw JSON empty, Knowledge Hub will build the log from the fields below.</p>
+        </div>
+        <label>
+            <span>Project Name</span>
+            <input type="text" name="project_name" value="{{ form_data.project_name }}">
+        </label>
+        <label>
+            <span>Source</span>
+            <input type="text" name="source" value="{{ form_data.source }}" placeholder="chatgpt / codex / manual">
+        </label>
+        <label class="full-width">
+            <span>Task</span>
+            <textarea name="task" rows="3">{{ form_data.task }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Summary</span>
+            <textarea name="summary" rows="4">{{ form_data.summary }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Actions Taken</span>
+            <textarea name="actions_taken" rows="4" placeholder="One action per line">{{ form_data.actions_taken }}</textarea>
+        </label>
+        <label>
+            <span>Files Touched</span>
+            <textarea name="files_touched" rows="4" placeholder="One file per line">{{ form_data.files_touched }}</textarea>
+        </label>
+        <label>
+            <span>Blockers</span>
+            <textarea name="blockers" rows="4" placeholder="One blocker per line">{{ form_data.blockers }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Next Step</span>
+            <textarea name="next_step" rows="3">{{ form_data.next_step }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Tags</span>
+            <textarea name="tags" rows="3" placeholder="Comma or line separated">{{ form_data.tags }}</textarea>
+        </label>
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Import Session Log</button>
+            <a class="button button-secondary" href="{{ url_for('session_logs.index') }}">Back to Logs</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

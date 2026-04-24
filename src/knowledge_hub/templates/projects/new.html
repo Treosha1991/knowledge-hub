@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Projects</p>
+        <h1>Create Project</h1>
+        <p class="lead">Keep the record simple and practical. You can edit or extend the project context later.</p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    {% if errors %}
+        <div class="validation-box">
+            {% for error in errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="form-grid">
+        <label>
+            <span>Workspace</span>
+            <select name="workspace_id">
+                {% for workspace in workspaces %}
+                    <option value="{{ workspace.id }}" {% if selected_workspace_id == workspace.id %}selected{% endif %}>
+                        {{ workspace.name }} ({{ workspace.slug }})
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            <span>Name</span>
+            <input type="text" name="name" value="{{ form_data.name }}" required>
+        </label>
+        <label>
+            <span>Slug</span>
+            <input type="text" name="slug" value="{{ form_data.slug }}" placeholder="leave blank to auto-generate">
+        </label>
+        <label class="full-width">
+            <span>Description</span>
+            <textarea name="description" rows="4">{{ form_data.description }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Stack</span>
+            <textarea name="stack" rows="3" placeholder="Flask, SQLite, Render, Google Drive">{{ form_data.stack }}</textarea>
+        </label>
+        <label>
+            <span>Status</span>
+            <input type="text" name="status" value="{{ form_data.status or 'active' }}">
+        </label>
+        <label class="full-width">
+            <span>Current Goal</span>
+            <textarea name="current_goal" rows="3">{{ form_data.current_goal }}</textarea>
+        </label>
+        <label class="full-width">
+            <span>Rules</span>
+            <textarea name="rules" rows="6">{{ form_data.rules }}</textarea>
+        </label>
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Save Project</button>
+            <a class="button button-secondary" href="{{ url_for('projects.index') }}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

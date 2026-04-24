@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: knowledge-hub
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 4
+    healthCheckPath: /healthz
+    envVars:
+      - key: KH_ENV
+        value: production
+      - key: KH_DEBUG
+        value: "0"
+      - key: KH_SECRET_KEY
+        generateValue: true
+      - key: KH_DATA_DIR
+        value: /var/data/knowledge_hub
+      # Set this to your real public Render/custom-domain URL before enabling SMTP login links:
+      # - key: KH_PUBLIC_BASE_URL
+      #   value: https://your-service.onrender.com
+      - key: KH_DEFAULT_OWNER_EMAIL
+        value: owner@knowledge-hub.local
+      - key: KH_DEFAULT_OWNER_NAME
+        value: Knowledge Hub Owner
+      - key: KH_MAIL_BACKEND
+        value: file
+      - key: KH_MAIL_FROM_ADDRESS
+        value: noreply@knowledge-hub.local
+      - key: KH_MAIL_FROM_NAME
+        value: Knowledge Hub
+      # Do not switch KH_AUTH_REQUIRED to 1 on Render until SMTP delivery is configured.
+      # - key: KH_AUTH_REQUIRED
+      #   value: "1"
+      # Switch KH_MAIL_BACKEND to smtp later and add:
+      # KH_SMTP_HOST
+      # KH_SMTP_PORT
+      # KH_SMTP_USERNAME
+      # KH_SMTP_PASSWORD
+      # KH_SMTP_USE_TLS or KH_SMTP_USE_SSL
+    disk:
+      name: knowledge-hub-data
+      mountPath: /var/data
+      sizeGB: 1

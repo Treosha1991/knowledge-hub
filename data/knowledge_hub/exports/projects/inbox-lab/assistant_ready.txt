@@ -1,0 +1,31 @@
+Assistant-Ready Project Brief
+Generated at: 2026-04-23T21:26:19.679239+00:00
+
+Project
+- Name: Inbox Lab
+- Slug: inbox-lab
+- Status: active
+- Current goal: Validate inbox automation
+- Description: Project created from inbox processing.
+- Stack: Not set
+
+Rules
+No rules captured yet.
+
+Immediate Focus
+- Recommended next step: Check the processed folder and context pack
+- Active blockers: none recorded
+- Recent tags: inbox, automation
+
+Latest Snapshot
+- Title: Current state
+Inbox processing now imports a full project package from the pending folder.
+
+Recent Session Notes
+- Process an inbox package
+  Summary: A pending JSON file should be imported and moved automatically.
+  Next step: Check the processed folder and context pack
+
+Suggested Chat Instruction
+- Template: Inbox-driven chat start [new_chat]
+Read the latest context pack and focus on the current goal.

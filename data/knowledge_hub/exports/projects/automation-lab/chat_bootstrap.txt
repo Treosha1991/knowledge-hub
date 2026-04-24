@@ -1,0 +1,11 @@
+You are joining ongoing work on the project 'Automation Lab' (automation-lab).
+Current goal: Not set.
+Recommended next step: Перезапустить сервер и проверить новые страницы
+Active blockers: Need restart after code changes.
+Project rules: no special rules captured yet.
+Recent decisions:
+- Добавлены JSON import, API и context pack.
+- API import работает через Flask test client.
+Key files touched recently: src/knowledge_hub/services/session_import.py, tools/context_pack.py, src/knowledge_hub/blueprints/api.py.
+Preferred chat instruction: Continue from this context and propose the next practical step.
+Do not ask to restate the basic context. Continue from this state and move the work forward.

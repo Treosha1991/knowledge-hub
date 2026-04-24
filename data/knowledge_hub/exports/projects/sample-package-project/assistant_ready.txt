@@ -1,0 +1,31 @@
+Assistant-Ready Project Brief
+Generated at: 2026-04-23T21:26:19.690282+00:00
+
+Project
+- Name: Sample Package Project
+- Slug: sample-package-project
+- Status: active
+- Current goal: Verify package import end-to-end
+- Description: Bundled sample package for Knowledge Hub import checks.
+- Stack: Not set
+
+Rules
+Prefer automation over manual entry.
+
+Immediate Focus
+- Recommended next step: Open the context pack for sample-package-project
+- Active blockers: none recorded
+- Recent tags: sample, package-import
+
+Latest Snapshot
+- Title: Current state
+Knowledge Hub already supports package import, context pack export, and JSON import for key entities.
+
+Recent Session Notes
+- Check the project package import flow
+  Summary: One JSON file imports the project, session log, prompt template, and snapshot.
+  Next step: Open the context pack for sample-package-project
+
+Suggested Chat Instruction
+- Template: Start a new project chat [new_chat]
+Read the context pack, list blockers, and suggest the next practical step.
