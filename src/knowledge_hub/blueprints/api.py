@@ -13,6 +13,8 @@ from ..services import (
     build_deploy_env_status,
     build_deploy_readiness,
     build_deploy_setup_guide,
+    build_gpt_actions_schema,
+    build_gpt_actions_setup_guide,
     build_ready_for_next_chat,
     build_manual_prompt_payload,
     build_manual_session_payload,
@@ -263,6 +265,18 @@ def deploy_setup():
     return jsonify({"ok": True, **build_deploy_setup_guide(current_app.config)})
 
 
+@bp.get("/gpt-actions/openapi.json")
+def gpt_actions_openapi():
+    server_url = current_app.config.get("PUBLIC_BASE_URL") or request.url_root.rstrip("/")
+    return jsonify(build_gpt_actions_schema(current_app.config, server_url=server_url))
+
+
+@bp.get("/gpt-actions/setup")
+def gpt_actions_setup_api():
+    server_url = current_app.config.get("PUBLIC_BASE_URL") or request.url_root.rstrip("/")
+    return jsonify({"ok": True, **build_gpt_actions_setup_guide(current_app.config, server_url=server_url)})
+
+
 @bp.get("/backups/latest")
 def backups_latest():
     raw_limit = request.args.get("limit", "").strip()
@@ -442,6 +456,49 @@ def chat_ingest_session():
             "skipped_log_ids": [log.id for log in result.skipped_logs],
         }
     )
+
+
+@bp.get("/gpt-actions/projects")
+def gpt_actions_projects():
+    db_session = get_session()
+    workspace_ids = sorted(getattr(g, "accessible_workspace_ids", set()))
+    projects = db_session.scalars(
+        select(Project)
+        .where(Project.workspace_id.in_(workspace_ids))
+        .order_by(Project.updated_at.desc(), Project.slug.asc())
+    ).all()
+    return jsonify(
+        {
+            "ok": True,
+            "projects": [
+                {
+                    "slug": project.slug,
+                    "name": project.name,
+                    "workspace_slug": project.workspace.slug if project.workspace is not None else None,
+                    "status": project.status,
+                    "current_goal": project.current_goal,
+                    "updated_at": project.updated_at.isoformat() if project.updated_at else None,
+                }
+                for project in projects
+            ],
+        }
+    )
+
+
+@bp.get("/gpt-actions/projects/<slug>/ready-for-next-chat")
+def gpt_actions_ready_for_next_chat(slug: str):
+    db_session = get_session()
+    project = get_project_for_actor(db_session, g.current_actor, slug)
+    if project is None:
+        abort(404)
+
+    payload = build_ready_for_next_chat(db_session, current_app.config, project)
+    return jsonify(payload)
+
+
+@bp.post("/gpt-actions/session-log")
+def gpt_actions_session_log():
+    return chat_ingest_session()
 
 
 @bp.post("/prompt-templates/import")

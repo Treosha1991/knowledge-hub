@@ -18,6 +18,7 @@ PUBLIC_ENDPOINTS = {
     "auth.magic_login",
     "auth.logout",
     "api.healthz",
+    "api.gpt_actions_openapi",
     "main.healthz",
     "static",
 }

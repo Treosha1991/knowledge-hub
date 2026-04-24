@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Chat Automation</p>
+        <h1>GPT Actions Setup</h1>
+        <p class="lead">
+            A minimal setup path for connecting a custom GPT to Knowledge Hub with Bearer auth and a
+            small OpenAPI schema.
+        </p>
+    </div>
+    <div class="header-actions">
+        <a class="button button-secondary" href="{{ url_for('api.gpt_actions_openapi') }}">Open Schema</a>
+        <a class="button button-secondary" href="{{ url_for('api.gpt_actions_setup_api') }}">Open JSON</a>
+        <a class="button button-secondary" href="{{ url_for('tokens.index') }}">Open API Tokens</a>
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Authentication</h2>
+            <span class="pill">{{ setup.authentication.type }}</span>
+        </div>
+        <div class="meta-stack">
+            <div><strong>Mode:</strong> {{ setup.authentication.mode }}</div>
+            <div><strong>Base URL:</strong> {{ setup.base_url }}</div>
+            <div><strong>Schema URL:</strong> <code>{{ setup.schema_url }}</code></div>
+            <div><strong>Token UI:</strong> <code>{{ setup.token_ui_url }}</code></div>
+        </div>
+        <div class="note-block">
+            {{ setup.authentication.token_value_hint }}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-header">
+            <h2>Builder Steps</h2>
+            <span class="pill">{{ setup.builder_steps | length }}</span>
+        </div>
+        <div class="item-list">
+            {% for item in setup.builder_steps %}
+                <div class="item-card">{{ item }}</div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Available Actions</h2>
+    </div>
+    <div class="item-list">
+        {% for item in setup.actions %}
+            <div class="item-card">
+                <strong>{{ item.operation_id }}</strong>
+                <div class="muted">{{ item.purpose }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="panel handoff-panel">
+    <div class="panel-header">
+        <h2>Suggested GPT Instruction</h2>
+    </div>
+    <textarea class="handoff-output" readonly>{{ setup.instruction_template }}</textarea>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Notes</h2>
+    </div>
+    <div class="item-list">
+        {% for item in setup.notes %}
+            <div class="item-card">{{ item }}</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

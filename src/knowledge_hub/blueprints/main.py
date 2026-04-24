@@ -9,6 +9,7 @@ from ..services import (
     build_deploy_env_status,
     build_deploy_readiness,
     build_deploy_setup_guide,
+    build_gpt_actions_setup_guide,
     create_backup_archive,
     get_latest_backup,
     get_mail_status,
@@ -138,6 +139,15 @@ def deploy_setup():
         "deploy_setup.html",
         page_title="Deploy Setup",
         setup=build_deploy_setup_guide(current_app.config),
+    )
+
+
+@bp.get("/gpt-actions/setup")
+def gpt_actions_setup():
+    return render_template(
+        "gpt_actions_setup.html",
+        page_title="GPT Actions Setup",
+        setup=build_gpt_actions_setup_guide(current_app.config),
     )
 
 

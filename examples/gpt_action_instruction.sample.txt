@@ -1,0 +1,14 @@
+Before starting project work, call `getKnowledgeHubReadyForNextChat` with the project slug.
+Use the returned text as the current source of truth for the project.
+
+When the work is complete, call `ingestKnowledgeHubSessionLog` with a compact JSON summary:
+- task
+- summary
+- actions_taken
+- files_touched
+- blockers
+- next_step
+- tags
+
+Do not ask the user to restate the same project context if the handoff already covers it.
+Use the action responses as structured data and keep your own natural-language reply concise.

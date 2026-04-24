@@ -51,6 +51,7 @@ from .content_import import (
 from .deploy_readiness import build_deploy_readiness, render_deploy_readiness_text
 from .deploy_env_status import build_deploy_env_status, render_deploy_env_status_text
 from .deploy_setup import build_deploy_setup_guide, render_deploy_setup_text
+from .gpt_actions import build_gpt_actions_schema, build_gpt_actions_setup_guide, render_gpt_actions_setup_text
 from .inbox import (
     InboxFileResult,
     InboxPaths,
@@ -128,6 +129,9 @@ __all__ = [
     "build_deploy_readiness",
     "build_deploy_setup_guide",
     "build_external_url",
+    "build_gpt_actions_schema",
+    "build_gpt_actions_setup_guide",
+    "render_gpt_actions_setup_text",
     "build_ready_for_next_chat",
     "build_manual_session_payload",
     "build_manual_prompt_payload",

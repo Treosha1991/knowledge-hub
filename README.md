@@ -143,6 +143,17 @@ POST /settings/api-tokens/
 POST /settings/api-tokens/<id>/revoke
 ```
 
+GPT Actions setup:
+
+```text
+GET /gpt-actions/setup
+GET /api/gpt-actions/setup
+GET /api/gpt-actions/openapi.json
+GET /api/gpt-actions/projects
+GET /api/gpt-actions/projects/<slug>/ready-for-next-chat
+POST /api/gpt-actions/session-log
+```
+
 Authentication pages:
 
 ```text
@@ -340,6 +351,16 @@ python tools/create_api_token.py --format json
 .\tools\create_api_token.ps1 -Email you@example.com -Label "Codex token"
 ```
 
+GPT Actions helpers:
+
+```powershell
+python tools/gpt_actions_setup.py
+python tools/gpt_actions_setup.py --format json
+python tools/gpt_actions_schema.py
+.\tools\gpt_actions_setup.ps1
+.\tools\gpt_actions_schema.ps1
+```
+
 Latest handoffs index:
 
 ```powershell
@@ -388,6 +409,7 @@ Starter prompt templates for this flow live in:
 ```text
 examples/chat_start_prompt.sample.txt
 examples/chat_finish_prompt.sample.txt
+examples/gpt_action_instruction.sample.txt
 ```
 
 Inbox API:
@@ -416,6 +438,7 @@ examples/knowledge_hub_internal_package.json
 examples/chat_ingest_session.sample.json
 examples/chat_start_prompt.sample.txt
 examples/chat_finish_prompt.sample.txt
+examples/gpt_action_instruction.sample.txt
 ```
 
 Example structure:
