@@ -7,6 +7,7 @@ from .projects import bp as projects_bp
 from .prompt_templates import bp as prompt_templates_bp
 from .session_logs import bp as session_logs_bp
 from .snapshots import bp as snapshots_bp
+from .tokens import bp as tokens_bp
 from .workspaces import bp as workspaces_bp
 
 
@@ -18,4 +19,5 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(session_logs_bp)
     app.register_blueprint(prompt_templates_bp)
     app.register_blueprint(snapshots_bp)
+    app.register_blueprint(tokens_bp)
     app.register_blueprint(workspaces_bp)

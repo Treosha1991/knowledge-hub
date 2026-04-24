@@ -1,0 +1,22 @@
+Return only a valid JSON object for Knowledge Hub session ingest.
+
+Required behavior:
+- Use this schema exactly.
+- Keep arrays as arrays of strings.
+- If a field is unknown, use an empty string or empty array.
+- Do not wrap the JSON in markdown fences.
+- Do not add commentary before or after the JSON.
+
+Schema:
+{
+  "workspace_slug": "personal",
+  "project_slug": "your-project-slug",
+  "source": "chatgpt",
+  "task": "",
+  "summary": "",
+  "actions_taken": [],
+  "files_touched": [],
+  "blockers": [],
+  "next_step": "",
+  "tags": []
+}

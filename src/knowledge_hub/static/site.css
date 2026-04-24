@@ -499,6 +499,10 @@ textarea {
     line-height: 1.5;
 }
 
+.top-gap {
+    margin-top: 0.9rem;
+}
+
 @media (max-width: 900px) {
     .stats-grid,
     .split-grid,

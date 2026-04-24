@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Automation Access</p>
+        <h1>API Tokens</h1>
+        <p class="lead">
+            Create a Bearer token for chat integrations. Use it to fetch project handoffs and send
+            session summaries back into Knowledge Hub without relying on the browser session.
+        </p>
+    </div>
+</section>
+
+<section class="panel form-panel">
+    {% if errors %}
+        <div class="validation-box">
+            {% for error in errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="form-grid">
+        <label>
+            <span>Token label</span>
+            <input type="text" name="label" value="{{ form_data.label }}" placeholder="Chat ingest token" required>
+        </label>
+        <label>
+            <span>Expiry days</span>
+            <input type="text" name="expires_in_days" value="{{ form_data.expires_in_days }}" placeholder="90">
+        </label>
+        <div class="note-block full-width">
+            The token is shown only once. Copy it before leaving this page.
+        </div>
+        <div class="form-actions full-width">
+            <button class="button button-primary" type="submit">Create API Token</button>
+            <a class="button button-secondary" href="{{ url_for('main.home') }}">Back</a>
+        </div>
+    </form>
+</section>
+
+{% if issued_token %}
+<section class="panel handoff-panel">
+    <div class="panel-header">
+        <h2>New Token</h2>
+        <span class="pill">copy now</span>
+    </div>
+    <div class="meta-stack">
+        <div><strong>Label:</strong> {{ issued_token.record.label }}</div>
+        <div><strong>Prefix:</strong> {{ issued_token.record.token_prefix }}</div>
+        <div><strong>Scopes:</strong> {{ issued_token.record.scopes | join(", ") }}</div>
+        {% if issued_token.record.expires_at %}
+            <div><strong>Expires:</strong> {{ issued_token.record.expires_at.isoformat() }}</div>
+        {% endif %}
+    </div>
+    <textarea class="handoff-output" readonly>{{ issued_token.plaintext_token }}</textarea>
+    <div class="code-list">
+        <code>Authorization: Bearer {{ issued_token.plaintext_token }}</code>
+    </div>
+</section>
+{% endif %}
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>How To Use</h2>
+    </div>
+    <div class="code-list">
+        <code>GET /api/projects/&lt;project-slug&gt;/ready-for-next-chat</code>
+        <code>POST /api/chat-ingest/session</code>
+    </div>
+    <div class="note-block">
+        Recommended flow: fetch <code>ready-for-next-chat</code> before a new AI session, then send a
+        session summary to <code>/api/chat-ingest/session</code> when the work is done.
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Existing Tokens</h2>
+        <span class="pill">{{ tokens | length }}</span>
+    </div>
+    {% if tokens %}
+        <div class="item-list">
+            {% for token in tokens %}
+                <div class="item-card">
+                    <div class="panel-header">
+                        <div>
+                            <strong>{{ token.label }}</strong>
+                            <div class="muted">{{ token.token_prefix }}</div>
+                        </div>
+                        <span class="pill {{ 'pill-pass' if token.status == 'active' else 'pill-fail' }}">{{ token.status }}</span>
+                    </div>
+                    <div class="meta-stack">
+                        <div><strong>Scopes:</strong> {{ token.scopes | join(", ") }}</div>
+                        <div><strong>Created:</strong> {{ token.created_at or "-" }}</div>
+                        <div><strong>Last used:</strong> {{ token.last_used_at or "Never" }}</div>
+                        <div><strong>Expires:</strong> {{ token.expires_at or "No expiry" }}</div>
+                    </div>
+                    {% if token.status == "active" %}
+                        <form method="post" action="{{ url_for('tokens.revoke', token_id=token.id) }}" class="inline-form top-gap">
+                            <button class="button button-danger" type="submit">Revoke</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            No API tokens yet. Create one to connect chat workflows to Knowledge Hub.
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

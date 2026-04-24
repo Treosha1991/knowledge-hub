@@ -1,0 +1,20 @@
+{
+  "workspace_slug": "personal",
+  "project_slug": "sample-package-project",
+  "source": "chatgpt",
+  "task": "Summarize the current project state for the next AI session",
+  "summary": "Validated the live auth flow and prepared a stable token-based ingest path for future chat automation.",
+  "actions_taken": [
+    "Checked deploy readiness in production",
+    "Verified live magic-link sign-in",
+    "Defined the next chat integration step"
+  ],
+  "files_touched": [],
+  "blockers": [],
+  "next_step": "Create an API token and connect ready-for-next-chat plus chat-ingest to the preferred AI workflow.",
+  "tags": [
+    "chat-ingest",
+    "automation",
+    "live"
+  ]
+}

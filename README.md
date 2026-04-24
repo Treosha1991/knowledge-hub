@@ -23,7 +23,8 @@ The app now also has a first auth-ready access slice:
 And there is now a first real login slice:
 
 - `GET /auth/login` generates a one-time magic login link
-- `GET /auth/magic/<token>` consumes the link and creates a signed-in session
+- `GET /auth/magic/<token>` opens a confirmation page for the one-time link
+- `POST /auth/magic/<token>` finishes sign-in and consumes the token
 - `POST /auth/logout` clears the session
 
 There is now a first auth-required mode too:
@@ -40,7 +41,7 @@ There is now a first mail-delivery layer too:
 - `GET /api/mail/status` shows current mail backend and recent outbox messages
 - real SMTP delivery is supported too when you switch `KH_MAIL_BACKEND` to `smtp`
 
-There is still no external email provider yet. The file outbox is the calm bridge between “show the link in HTML” and real delivery.
+There is still no external email provider yet. The file outbox is the calm bridge between "show the link in HTML" and real delivery.
 
 ## Run locally
 
@@ -119,6 +120,7 @@ Primary import endpoints:
 
 ```text
 POST /api/session-logs/import
+POST /api/chat-ingest/session
 POST /api/prompt-templates/import
 POST /api/snapshots/import
 POST /api/project-packages/import
@@ -133,11 +135,20 @@ GET /api/deploy/env-status
 GET /api/deploy/setup
 ```
 
+API token UI:
+
+```text
+GET /settings/api-tokens/
+POST /settings/api-tokens/
+POST /settings/api-tokens/<id>/revoke
+```
+
 Authentication pages:
 
 ```text
 GET /auth/login
 GET /auth/magic/<token>
+POST /auth/magic/<token>
 POST /auth/logout
 ```
 
@@ -320,6 +331,15 @@ python tools/send_test_email.py you@example.com --subject "Knowledge Hub SMTP te
 .\tools\send_test_email.ps1 -ToEmail you@example.com
 ```
 
+API token creation:
+
+```powershell
+python tools/create_api_token.py
+python tools/create_api_token.py --email you@example.com --label "ChatGPT ingest token"
+python tools/create_api_token.py --format json
+.\tools\create_api_token.ps1 -Email you@example.com -Label "Codex token"
+```
+
 Latest handoffs index:
 
 ```powershell
@@ -342,6 +362,32 @@ python tools/latest_automation_events.py --limit 5 --format json
 ```powershell
 $body = Get-Content .\session.json -Raw
 Invoke-RestMethod -Uri http://127.0.0.1:5001/api/session-logs/import -Method Post -ContentType "application/json" -Body $body
+```
+
+## Chat integration flow
+
+Create a token in the UI or CLI, then use it as a Bearer token.
+
+Fetch project context before a new AI session:
+
+```powershell
+$headers = @{ Authorization = "Bearer khp_..." }
+Invoke-RestMethod -Uri http://127.0.0.1:5001/api/projects/sample-package-project/ready-for-next-chat -Headers $headers
+```
+
+Save a session summary after the AI work is done:
+
+```powershell
+$headers = @{ Authorization = "Bearer khp_..." }
+$body = Get-Content .\examples\chat_ingest_session.sample.json -Raw
+Invoke-RestMethod -Uri http://127.0.0.1:5001/api/chat-ingest/session -Method Post -Headers $headers -ContentType "application/json" -Body $body
+```
+
+Starter prompt templates for this flow live in:
+
+```text
+examples/chat_start_prompt.sample.txt
+examples/chat_finish_prompt.sample.txt
 ```
 
 Inbox API:
@@ -367,6 +413,9 @@ See the ready file:
 ```text
 examples/project_package.sample.json
 examples/knowledge_hub_internal_package.json
+examples/chat_ingest_session.sample.json
+examples/chat_start_prompt.sample.txt
+examples/chat_finish_prompt.sample.txt
 ```
 
 Example structure:

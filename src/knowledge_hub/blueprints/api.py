@@ -43,6 +43,7 @@ from ..services import (
     render_context_pack_text,
     safe_record_automation_event,
     safe_record_events_for_projects,
+    serialize_api_token,
     upsert_workspace_membership,
 )
 
@@ -67,6 +68,7 @@ def actor():
                 "status": g.current_actor.status,
                 "source": getattr(g, "current_actor_source", None),
             },
+            "api_token": serialize_api_token(g.current_api_token) if getattr(g, "current_api_token", None) else None,
             "accessible_workspace_ids": sorted(getattr(g, "accessible_workspace_ids", set())),
         }
     )
@@ -360,6 +362,84 @@ def import_session_logs_api():
             ],
             "skipped_log_ids": [log.id for log in result.skipped_logs],
             "project_exports": [item.to_dict() for item in export_paths],
+        }
+    )
+
+
+@bp.post("/chat-ingest/session")
+def chat_ingest_session():
+    db_session = get_session()
+    try:
+        auto_create_project = _auto_create_flag()
+        fallback_project_id = _fallback_project_id()
+        fallback_project_slug = request.args.get("project_slug", "").strip() or None
+        fallback_workspace_id = _fallback_workspace_id() or _default_accessible_workspace_id()
+        fallback_workspace_slug = request.args.get("workspace_slug", "").strip() or None
+
+        payload = _normalize_chat_ingest_payload(_load_request_payload(build_manual_session_payload))
+        if not fallback_project_slug:
+            fallback_project_slug = request.form.get("project_slug", "").strip() or None
+        if not fallback_workspace_slug:
+            fallback_workspace_slug = request.form.get("workspace_slug", "").strip() or None
+
+        result = import_session_payload(
+            db_session,
+            payload,
+            fallback_project_id=fallback_project_id,
+            fallback_project_slug=fallback_project_slug,
+            fallback_workspace_id=fallback_workspace_id,
+            fallback_workspace_slug=fallback_workspace_slug,
+            auto_create_project=auto_create_project,
+            config=current_app.config,
+            allowed_workspace_ids=getattr(g, "accessible_workspace_ids", set()),
+        )
+        touched_projects = [log.project.slug for log in result.logs + result.skipped_logs]
+        export_paths = refresh_project_export_bundles(
+            db_session,
+            current_app.config,
+            touched_projects,
+        )
+        project_slug = touched_projects[0] if touched_projects else fallback_project_slug
+        safe_record_events_for_projects(
+            db_session,
+            project_slugs=touched_projects or ([project_slug] if project_slug else []),
+            event_type="chat_ingest_session",
+            source="api",
+            message=(
+                f"Chat ingest completed. Imported {result.imported_count}, "
+                f"skipped duplicates {result.skipped_count}."
+            ),
+            details={
+                "imported_count": result.imported_count,
+                "skipped_duplicates": result.skipped_count,
+                "actor_email": g.current_actor.email if getattr(g, "current_actor", None) else None,
+                "actor_source": getattr(g, "current_actor_source", None),
+                "api_token": serialize_api_token(g.current_api_token) if getattr(g, "current_api_token", None) else None,
+            },
+            log_global_if_empty=True,
+        )
+    except SessionImportError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+
+    return jsonify(
+        {
+            "ok": True,
+            "project_slug": project_slug,
+            "imported_count": result.imported_count,
+            "skipped_duplicates": result.skipped_count,
+            "project_exports": [item.to_dict() for item in export_paths],
+            "ready_for_next_chat_url": (
+                f"/api/projects/{project_slug}/ready-for-next-chat"
+                if project_slug
+                else None
+            ),
+            "ready_for_next_chat_text_url": (
+                f"/api/projects/{project_slug}/ready-for-next-chat.txt"
+                if project_slug
+                else None
+            ),
+            "log_ids": [log.id for log in result.logs],
+            "skipped_log_ids": [log.id for log in result.skipped_logs],
         }
     )
 
@@ -733,6 +813,18 @@ def _load_request_payload(manual_builder=None):
         raise SessionImportError("This endpoint requires a JSON request body or raw_json form field.")
 
     return manual_builder(request.form)
+
+
+def _normalize_chat_ingest_payload(payload):
+    if isinstance(payload, dict):
+        nested = payload.get("session_log") or payload.get("log")
+        if isinstance(nested, dict):
+            merged = dict(payload)
+            merged.pop("session_log", None)
+            merged.pop("log", None)
+            merged.update(nested)
+            return merged
+    return payload
 
 
 def _serialize_workspace_summary(db_session, workspace: Workspace) -> dict:

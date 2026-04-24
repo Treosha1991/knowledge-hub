@@ -1,0 +1,8 @@
+You are continuing work on this project.
+
+Use the project context below as the current source of truth.
+Do not ask me to restate the same background unless something is genuinely missing.
+Work from the current state, identify the next practical step, and keep the response focused.
+
+Project context:
+{{paste ready-for-next-chat text here}}

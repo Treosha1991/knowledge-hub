@@ -1,4 +1,14 @@
 from .assistant_ready import build_assistant_ready_pack, render_assistant_ready_text
+from .api_tokens import (
+    DEFAULT_TOKEN_SCOPES,
+    IssuedApiToken,
+    authenticate_api_token,
+    extract_api_token_from_request,
+    issue_api_token,
+    list_user_api_tokens,
+    revoke_api_token,
+    serialize_api_token,
+)
 from .access import (
     actor_override_enabled,
     auth_required,
@@ -96,7 +106,9 @@ from .workspaces import ensure_default_workspace, list_workspaces, resolve_works
 
 
 __all__ = [
+    "DEFAULT_TOKEN_SCOPES",
     "ImportResult",
+    "IssuedApiToken",
     "ProjectPackageResult",
     "ProjectExportPaths",
     "SessionImportError",
@@ -107,6 +119,7 @@ __all__ = [
     "InboxProcessSummary",
     "MailDeliveryResult",
     "actor_override_enabled",
+    "authenticate_api_token",
     "auth_required",
     "build_assistant_ready_pack",
     "build_chat_bootstrap_pack",
@@ -128,6 +141,7 @@ __all__ = [
     "endpoint_allows_anonymous",
     "ensure_workspace_owner",
     "ensure_workspaces_have_owner",
+    "extract_api_token_from_request",
     "get_default_accessible_workspace",
     "get_latest_backup",
     "get_mail_status",
@@ -145,6 +159,7 @@ __all__ = [
     "import_prompt_template_payload",
     "import_session_payload",
     "import_snapshot_payload",
+    "issue_api_token",
     "issue_login_token",
     "preview_login_token",
     "list_accessible_project_ids",
@@ -156,6 +171,7 @@ __all__ = [
     "list_recent_outbox_messages",
     "list_recent_backups",
     "list_recent_automation_events",
+    "list_user_api_tokens",
     "find_duplicate_session_log_groups",
     "load_projects_for_dedupe",
     "mark_inbox_watcher_heartbeat",
@@ -168,6 +184,7 @@ __all__ = [
     "refresh_project_export_bundle",
     "refresh_project_export_bundles",
     "require_workspace_role",
+    "revoke_api_token",
     "resolve_request_actor",
     "resolve_session_actor",
     "resolve_workspace",
@@ -183,6 +200,7 @@ __all__ = [
     "safe_record_events_for_projects",
     "send_email",
     "send_magic_login_email",
+    "serialize_api_token",
     "should_clear_actor_override",
     "sign_in_user",
     "sign_out_user",

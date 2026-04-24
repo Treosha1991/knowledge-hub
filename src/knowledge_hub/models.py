@@ -55,6 +55,10 @@ class User(Base, TimestampMixin):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    api_tokens: Mapped[list["ApiToken"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
     login_tokens: Mapped[list["LoginToken"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
@@ -162,6 +166,22 @@ class AutomationEvent(Base, CreatedAtMixin):
     details: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
     project: Mapped["Project | None"] = relationship(back_populates="automation_events")
+
+
+class ApiToken(Base, TimestampMixin):
+    __tablename__ = "api_tokens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    label: Mapped[str] = mapped_column(String(200), nullable=False)
+    token_prefix: Mapped[str] = mapped_column(String(32), nullable=False)
+    token_hash: Mapped[str] = mapped_column(String(128), unique=True, index=True, nullable=False)
+    scopes: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="active")
+    expires_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True))
+    last_used_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True))
+
+    user: Mapped["User"] = relationship(back_populates="api_tokens")
 
 
 class LoginToken(Base, CreatedAtMixin):

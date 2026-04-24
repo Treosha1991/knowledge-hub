@@ -9,9 +9,11 @@ from .config import get_config
 from .db import create_all, get_session, init_db
 from .services import (
     actor_override_enabled,
+    authenticate_api_token,
     auth_required,
     endpoint_allows_anonymous,
     ensure_application_schema,
+    extract_api_token_from_request,
     list_accessible_workspace_ids,
     list_accessible_workspaces,
     process_inbox,
@@ -61,6 +63,22 @@ def _register_request_context(app: Flask) -> None:
     @app.before_request
     def load_actor_context() -> None:
         session = get_session()
+        g.current_api_token = None
+
+        raw_api_token = extract_api_token_from_request(request)
+        if raw_api_token:
+            try:
+                actor, token_record = authenticate_api_token(session, plaintext_token=raw_api_token, commit=True)
+            except ValueError as exc:
+                abort(403, description=str(exc))
+
+            g.current_actor = actor
+            g.current_actor_source = "api_token"
+            g.current_api_token = token_record
+            g.accessible_workspace_ids = set(list_accessible_workspace_ids(session, actor))
+            g.accessible_workspaces = list_accessible_workspaces(session, actor)
+            return
+
         try:
             actor, source = resolve_request_actor(session, app.config, request)
         except PermissionError as exc:
